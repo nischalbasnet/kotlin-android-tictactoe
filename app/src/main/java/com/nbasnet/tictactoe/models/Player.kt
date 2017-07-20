@@ -5,7 +5,6 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
-import com.nbasnet.tictactoe.PlayAreaInfo
 
 data class Player(val name: String, val symbolResource: Int, val color: Int) {
     private val _selectedAreas = mutableListOf<PlayAreaInfo>()
@@ -40,7 +39,7 @@ data class Player(val name: String, val symbolResource: Int, val color: Int) {
         _scoreMap["col${selectArea.column}"] = (_scoreMap["col${selectArea.column}"] ?: 0) + 1
         _isWinner = checkForWinner(_scoreMap["col${selectArea.column}"] ?: 0)
 
-        if (!_isWinner && selectArea.isDiagonal()) {
+        if (!_isWinner && selectArea.isDiagonal) {
             if (selectArea.row == 2) {
                 _scoreMap["backD"] = (_scoreMap["backD"] ?: 0) + 1
                 _scoreMap["forwardD"] = (_scoreMap["forwardD"] ?: 0) + 1

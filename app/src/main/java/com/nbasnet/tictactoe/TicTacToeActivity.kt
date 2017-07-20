@@ -11,13 +11,12 @@ import com.nbasnet.extensions.activity.toast
 import com.nbasnet.tictactoe.controllers.TicTacToeGameController
 import com.nbasnet.tictactoe.databinding.TictactoeGameBinding
 import com.nbasnet.tictactoe.models.GameInfo
+import com.nbasnet.tictactoe.models.PlayAreaInfo
 import com.nbasnet.tictactoe.models.Player
 import com.nbasnet.tictactoe.models.PlayerGameInfo
 import kotlinx.android.synthetic.main.tictactoe_game.*
 
 class TicTacToeActivity : AppCompatActivity() {
-    private lateinit var _player1: Player
-    private lateinit var _player2: Player
     private lateinit var _fullGameInfo: GameInfo
     private lateinit var _gameController: TicTacToeGameController
 
@@ -31,8 +30,8 @@ class TicTacToeActivity : AppCompatActivity() {
         val inP1Name = playersInfo.getString("player1")
         val inP2Name = playersInfo.getString("player2")
 
-        _player1 = getPlayer(1, inP1Name)
-        _player2 = getPlayer(2, inP2Name)
+        val _player1 = getPlayer(1, inP1Name)
+        val _player2 = getPlayer(2, inP2Name)
         _fullGameInfo = GameInfo(
                 PlayerGameInfo(_player1),
                 PlayerGameInfo(_player2)
@@ -144,15 +143,5 @@ class TicTacToeActivity : AppCompatActivity() {
             labelWinnerBanner.text = resources.getString(R.string.label_winner)
             labelWinner.text = _gameController.getCurrentPlayer().name
         }
-    }
-}
-
-data class PlayAreaInfo(val row: Int, val column: Int) {
-    fun isDiagonal(): Boolean {
-        var diagonal = false
-
-        if (row == column || Math.abs(row - column) != 1) diagonal = true
-
-        return diagonal
     }
 }

@@ -1,6 +1,6 @@
 package com.nbasnet.tictactoe.controllers
 
-import com.nbasnet.tictactoe.PlayAreaInfo
+import com.nbasnet.tictactoe.models.PlayAreaInfo
 import com.nbasnet.tictactoe.models.Player
 
 class TicTacToeGameController(val player1: Player, val player2: Player) {
