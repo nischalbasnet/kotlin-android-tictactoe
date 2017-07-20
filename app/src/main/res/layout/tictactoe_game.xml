@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data class="TictactoeGameBinding">
+
+        <variable
+            name="gameInfo"
+            type="com.nbasnet.tictactoe.models.GameInfo" />
+    </data>
+
+    <TableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/player1Active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="false"
+                android:contentDescription="Active Icon"
+                android:cropToPadding="false"
+                app:srcCompat="@android:drawable/btn_star_big_on" />
+
+            <TextView
+                android:id="@+id/labelWinnerBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <ImageView
+                android:id="@+id/player2Active"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="Active Icon"
+                app:srcCompat="@android:drawable/btn_star_big_on" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="0dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/labelPlayer1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="@{gameInfo.player1Info.player.name}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/labelWinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@android:color/holo_green_dark"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/labelPlayer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:text="@{gameInfo.player2Info.player.name}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnArea11"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+
+            <Button
+                android:id="@+id/btnArea12"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+
+            <Button
+                android:id="@+id/btnArea13"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnArea21"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+
+            <Button
+                android:id="@+id/btnArea22"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+
+            <Button
+                android:id="@+id/btnArea23"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnArea31"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+
+            <Button
+                android:id="@+id/btnArea32"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+
+            <Button
+                android:id="@+id/btnArea33"
+                android:layout_width="110dp"
+                android:layout_height="110dp" />
+        </TableRow>
+    </TableLayout>
+</layout>

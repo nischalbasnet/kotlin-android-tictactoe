@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TiCTaCToE</string>
+    <string name="title_game_room">Game Room</string>
+    <string name="btn_play_game">Play Game</string>
+    <string name="player_1">Player 1</string>
+    <string name="player_2">Player 2</string>
+    <string name="input_date_of_birth">Date of Birth</string>
+    <string name="label_winner">Winner!!</string>
+</resources>
