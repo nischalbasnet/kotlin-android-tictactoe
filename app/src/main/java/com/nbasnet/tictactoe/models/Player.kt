@@ -7,6 +7,7 @@ import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
 
 data class Player(val name: String, val symbolResource: Int, val color: Int) {
+    val maxRow: Int = 3
     var isActive: Boolean = false
     private val _selectedAreas = mutableListOf<PlayAreaInfo>()
     var isWinner = false
@@ -46,11 +47,11 @@ data class Player(val name: String, val symbolResource: Int, val color: Int) {
     fun setSelectedArea(selectArea: PlayAreaInfo): Player {
         _selectedAreas.add(selectArea)
 
-        _scoreMap["row${selectArea.row}"] = (_scoreMap["row${selectArea.row}"] ?: 0) + 1
-        isWinner = checkForWinner(_scoreMap["row${selectArea.row}"] ?: 0)
+        _scoreMap["rowx${selectArea.row}"] = (_scoreMap["rowx${selectArea.row}"] ?: 0) + 1
+        isWinner = checkForWinner(_scoreMap["rowx${selectArea.row}"] ?: 0)
 
-        _scoreMap["col${selectArea.column}"] = (_scoreMap["col${selectArea.column}"] ?: 0) + 1
-        isWinner = checkForWinner(_scoreMap["col${selectArea.column}"] ?: 0)
+        _scoreMap["colx${selectArea.column}"] = (_scoreMap["colx${selectArea.column}"] ?: 0) + 1
+        isWinner = checkForWinner(_scoreMap["colx${selectArea.column}"] ?: 0)
 
         if (!isWinner && selectArea.isDiagonal) {
             if (selectArea.row == 2) {
@@ -71,9 +72,41 @@ data class Player(val name: String, val symbolResource: Int, val color: Int) {
     }
 
     /**
+     * Return the winning row or column or diagonal
+     */
+    fun winningRow(): WinningRegionInfo {
+        var region = RegionType.NONE
+        var rowCol = 0
+
+        for ((regionInfo, score) in _scoreMap) {
+            if (score > maxRow - 1) {
+                if (regionInfo == "forwardD") {
+                    region = RegionType.FORWARD_DIAGONAL
+                    rowCol = 0
+                } else if (regionInfo == "backD") {
+                    region = RegionType.BACK_DIAGONAL
+                    rowCol = 0
+                } else {
+                    val regionContents = regionInfo.split("x")
+                    region = if (regionContents.first() == "row") RegionType.ROW else RegionType.COL
+                    rowCol = regionContents.last().toInt()
+                }
+            }
+        }
+
+        return WinningRegionInfo(rowCol, region)
+    }
+
+    /**
      * Check if the player has won
      */
     private fun checkForWinner(value: Int): Boolean {
-        return if (isWinner) isWinner else value > 2
+        return if (isWinner) isWinner else value > maxRow - 1
     }
+}
+
+data class WinningRegionInfo(val rowCol: Int, val regionType: RegionType)
+
+enum class RegionType {
+    COL, ROW, FORWARD_DIAGONAL, BACK_DIAGONAL, NONE
 }

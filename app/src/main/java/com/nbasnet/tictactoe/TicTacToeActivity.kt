@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
@@ -12,15 +13,14 @@ import com.nbasnet.extensions.activity.successToast
 import com.nbasnet.extensions.activity.toast
 import com.nbasnet.tictactoe.controllers.TicTacToeGameController
 import com.nbasnet.tictactoe.databinding.TictactoeGameBinding
-import com.nbasnet.tictactoe.models.GameInfo
-import com.nbasnet.tictactoe.models.PlayAreaInfo
-import com.nbasnet.tictactoe.models.Player
-import com.nbasnet.tictactoe.models.PlayerGameInfo
+import com.nbasnet.tictactoe.models.*
 import kotlinx.android.synthetic.main.tictactoe_game.*
 
 class TicTacToeActivity : AppCompatActivity() {
     private lateinit var _fullGameInfo: GameInfo
     private lateinit var _gameController: TicTacToeGameController
+
+    private lateinit var buttonList: List<BtnAreaInfo>
 
     /**
      * View oncreate function
@@ -28,6 +28,19 @@ class TicTacToeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tictactoe_game)
+
+        //TODO Implement this
+//        buttonList = listOf<BtnAreaInfo>(
+//                BtnAreaInfo(1, 1, btnArea11),
+//                BtnAreaInfo(1, 2, btnArea12),
+//                BtnAreaInfo(1, 3, btnArea13),
+//                BtnAreaInfo(2, 1, btnArea21),
+//                BtnAreaInfo(2, 2, btnArea22),
+//                BtnAreaInfo(2, 3, btnArea23),
+//                BtnAreaInfo(3, 1, btnArea31),
+//                BtnAreaInfo(3, 2, btnArea32),
+//                BtnAreaInfo(3, 3, btnArea33)
+//        )
 
         title = resources.getString(R.string.title_game_room)
         //retrieve the users info from the payload passed to the view
@@ -163,6 +176,8 @@ class TicTacToeActivity : AppCompatActivity() {
                     .duration(1000)
                     .repeat(3)
                     .playOn(if (_gameController.isCurrentPlayer1()) player1Active else player2Active)
+
+            winningRegionAnimations(_gameController.currentPlayer.winningRow())
         } else {
             if (_gameController.isCurrentPlayer1()) {
                 slideOutLeftAnim.playOn(player2Active)
@@ -173,4 +188,51 @@ class TicTacToeActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * Handles winning region animation
+     */
+    private fun winningRegionAnimations(winningRegionInfo: WinningRegionInfo): Unit {
+        val waveAnimation = YoYo.with(Techniques.RubberBand).duration(1000).repeat(3)
+
+        if (winningRegionInfo.regionType == RegionType.FORWARD_DIAGONAL) {
+            waveAnimation.playOn(btnArea13)
+            waveAnimation.playOn(btnArea22)
+            waveAnimation.playOn(btnArea31)
+        } else if (winningRegionInfo.regionType == RegionType.BACK_DIAGONAL) {
+            waveAnimation.playOn(btnArea11)
+            waveAnimation.playOn(btnArea22)
+            waveAnimation.playOn(btnArea33)
+        } else if (winningRegionInfo.regionType == RegionType.COL) {
+            if (winningRegionInfo.rowCol == 1) {
+                waveAnimation.playOn(btnArea11)
+                waveAnimation.playOn(btnArea21)
+                waveAnimation.playOn(btnArea31)
+            } else if (winningRegionInfo.rowCol == 2) {
+                waveAnimation.playOn(btnArea12)
+                waveAnimation.playOn(btnArea22)
+                waveAnimation.playOn(btnArea32)
+            } else {
+                waveAnimation.playOn(btnArea13)
+                waveAnimation.playOn(btnArea23)
+                waveAnimation.playOn(btnArea33)
+            }
+        } else if (winningRegionInfo.regionType == RegionType.ROW) {
+            if (winningRegionInfo.rowCol == 1) {
+                waveAnimation.playOn(btnArea11)
+                waveAnimation.playOn(btnArea12)
+                waveAnimation.playOn(btnArea13)
+            } else if (winningRegionInfo.rowCol == 2) {
+                waveAnimation.playOn(btnArea21)
+                waveAnimation.playOn(btnArea22)
+                waveAnimation.playOn(btnArea23)
+            } else {
+                waveAnimation.playOn(btnArea31)
+                waveAnimation.playOn(btnArea32)
+                waveAnimation.playOn(btnArea33)
+            }
+        }
+    }
 }
+
+data class BtnAreaInfo(val row: Int, val col: Int, val button: Button)
