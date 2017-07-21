@@ -6,6 +6,8 @@ import android.app.Dialog
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.DatePicker
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.Years
@@ -41,8 +43,21 @@ class MainActivity : AppCompatActivity() {
 
         buttonPlayGame.setOnClickListener {
             if (inputDOB.text.isEmpty()) {
+                YoYo.with(Techniques.Shake)
+                        .duration(700)
+                        .playOn(inputDOB)
+
                 failToast("Please enter DOB.")
             } else if (inputPlayer1Name.text.toString().isBlank() || inputPlayer2Name.text.toString().isBlank()) {
+                if (inputPlayer1Name.text.toString().isBlank()) {
+                    YoYo.with(Techniques.Shake)
+                            .duration(700)
+                            .playOn(inputPlayer1Name)
+                } else {
+                    YoYo.with(Techniques.Shake)
+                            .duration(700)
+                            .playOn(inputPlayer2Name)
+                }
                 failToast("Please enter player names")
             } else {
                 val userEnteredDOB = DateTime.parse(inputDOB.text.toString(), formatter)
@@ -55,12 +70,28 @@ class MainActivity : AppCompatActivity() {
                     val gameUsers = Bundle()
                     gameUsers.putString("player1", inputPlayer1Name.text.toString())
                     gameUsers.putString("player2", inputPlayer2Name.text.toString())
-                    startActivity(TicTacToeActivity::class.java, gameUsers)
+
+                    YoYo.with(Techniques.Hinge)
+                            .duration(1000)
+                            .onEnd {
+                                startActivity(TicTacToeActivity::class.java, gameUsers)
+                            }
+                            .playOn(buttonPlayGame)
                 } else {
                     failToast("You need to be over 18 to play this game.")
                 }
             }
         }
+    }
+
+    /**
+     * Perform action when the view resumes
+     */
+    override fun onPostResume() {
+        super.onPostResume()
+        YoYo.with(Techniques.SlideInUp)
+                .duration(1000)
+                .playOn(buttonPlayGame)
     }
 
     private val datePickerListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener {

@@ -40,6 +40,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'joda-time:joda-time:2.9.9'
+    compile 'com.android.support:support-compat:25.3.1'
+    compile 'com.daimajia.easing:library:2.0@aar'
+    compile 'com.daimajia.androidanimations:library:2.3@aar'
+
     testCompile 'junit:junit:4.12'
 }
 repositories {

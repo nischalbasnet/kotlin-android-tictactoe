@@ -28,6 +28,7 @@
                 android:adjustViewBounds="false"
                 android:contentDescription="Active Icon"
                 android:cropToPadding="false"
+                android:visibility="visible"
                 app:srcCompat="@android:drawable/btn_star_big_on" />
 
             <TextView
@@ -43,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="Active Icon"
+                android:visibility="visible"
                 app:srcCompat="@android:drawable/btn_star_big_on" />
         </TableRow>
 
