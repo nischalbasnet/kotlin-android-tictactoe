@@ -21,6 +21,8 @@ class TicTacToeActivity : AppCompatActivity() {
     private lateinit var _gameController: TicTacToeGameController
 
     private lateinit var buttonList: List<BtnAreaInfo>
+    private var _gridRow: Int = 3
+    private lateinit var _frontDiagonalRows: Map<Int, Int>
 
     /**
      * View oncreate function
@@ -29,18 +31,14 @@ class TicTacToeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tictactoe_game)
 
-        //TODO Implement this
-//        buttonList = listOf<BtnAreaInfo>(
-//                BtnAreaInfo(1, 1, btnArea11),
-//                BtnAreaInfo(1, 2, btnArea12),
-//                BtnAreaInfo(1, 3, btnArea13),
-//                BtnAreaInfo(2, 1, btnArea21),
-//                BtnAreaInfo(2, 2, btnArea22),
-//                BtnAreaInfo(2, 3, btnArea23),
-//                BtnAreaInfo(3, 1, btnArea31),
-//                BtnAreaInfo(3, 2, btnArea32),
-//                BtnAreaInfo(3, 3, btnArea33)
-//        )
+        _gridRow = 3
+
+        //fill diagonal row
+        val tmpDiagonalRows = mutableMapOf<Int, Int>()
+        for ((subDiagonal, i) in (1.._gridRow).withIndex()) {
+            tmpDiagonalRows[i] = _gridRow - subDiagonal
+        }
+        _frontDiagonalRows = tmpDiagonalRows.toMap()
 
         title = resources.getString(R.string.title_game_room)
         //retrieve the users info from the payload passed to the view
@@ -63,46 +61,28 @@ class TicTacToeActivity : AppCompatActivity() {
         //set label for the indication of current player
         setWinnerCurrentPlayerLabels()
 
+        //List to hold the info about all the playable region
+        buttonList = listOf<BtnAreaInfo>(
+                BtnAreaInfo(1, 1, btnArea11),
+                BtnAreaInfo(1, 2, btnArea12),
+                BtnAreaInfo(1, 3, btnArea13),
+                BtnAreaInfo(2, 1, btnArea21),
+                BtnAreaInfo(2, 2, btnArea22),
+                BtnAreaInfo(2, 3, btnArea23),
+                BtnAreaInfo(3, 1, btnArea31),
+                BtnAreaInfo(3, 2, btnArea32),
+                BtnAreaInfo(3, 3, btnArea33)
+        )
+
         /**
          * Add event handlers for all the button
          */
-        btnArea11.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(1, 1)
-            selectArea(it, btnAreaInfo)
-        }
-        btnArea12.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(1, 2)
-            selectArea(it, btnAreaInfo)
-        }
-        btnArea13.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(1, 3)
-            selectArea(it, btnAreaInfo)
-        }
-
-        btnArea21.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(2, 1)
-            selectArea(it, btnAreaInfo)
-        }
-        btnArea22.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(2, 2)
-            selectArea(it, btnAreaInfo)
-        }
-        btnArea23.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(2, 3)
-            selectArea(it, btnAreaInfo)
-        }
-
-        btnArea31.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(3, 1)
-            selectArea(it, btnAreaInfo)
-        }
-        btnArea32.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(3, 2)
-            selectArea(it, btnAreaInfo)
-        }
-        btnArea33.setOnClickListener {
-            val btnAreaInfo = PlayAreaInfo(3, 3)
-            selectArea(it, btnAreaInfo)
+        buttonList.forEach {
+            val btnInfo = it
+            it.button.setOnClickListener {
+                val btnAreaInfo = PlayAreaInfo(btnInfo.row, btnInfo.col)
+                selectArea(it, btnAreaInfo)
+            }
         }
     }
 
@@ -196,40 +176,28 @@ class TicTacToeActivity : AppCompatActivity() {
         val waveAnimation = YoYo.with(Techniques.RubberBand).duration(1000).repeat(3)
 
         if (winningRegionInfo.regionType == RegionType.FORWARD_DIAGONAL) {
-            waveAnimation.playOn(btnArea13)
-            waveAnimation.playOn(btnArea22)
-            waveAnimation.playOn(btnArea31)
+            buttonList.forEach {
+                if (_frontDiagonalRows[it.row] == it.col) {
+                    waveAnimation.playOn(it.button)
+                }
+            }
         } else if (winningRegionInfo.regionType == RegionType.BACK_DIAGONAL) {
-            waveAnimation.playOn(btnArea11)
-            waveAnimation.playOn(btnArea22)
-            waveAnimation.playOn(btnArea33)
+            buttonList.forEach {
+                if (it.col == it.row) {
+                    waveAnimation.playOn(it.button)
+                }
+            }
         } else if (winningRegionInfo.regionType == RegionType.COL) {
-            if (winningRegionInfo.rowCol == 1) {
-                waveAnimation.playOn(btnArea11)
-                waveAnimation.playOn(btnArea21)
-                waveAnimation.playOn(btnArea31)
-            } else if (winningRegionInfo.rowCol == 2) {
-                waveAnimation.playOn(btnArea12)
-                waveAnimation.playOn(btnArea22)
-                waveAnimation.playOn(btnArea32)
-            } else {
-                waveAnimation.playOn(btnArea13)
-                waveAnimation.playOn(btnArea23)
-                waveAnimation.playOn(btnArea33)
+            buttonList.forEach {
+                if (it.col == winningRegionInfo.rowCol) {
+                    waveAnimation.playOn(it.button)
+                }
             }
         } else if (winningRegionInfo.regionType == RegionType.ROW) {
-            if (winningRegionInfo.rowCol == 1) {
-                waveAnimation.playOn(btnArea11)
-                waveAnimation.playOn(btnArea12)
-                waveAnimation.playOn(btnArea13)
-            } else if (winningRegionInfo.rowCol == 2) {
-                waveAnimation.playOn(btnArea21)
-                waveAnimation.playOn(btnArea22)
-                waveAnimation.playOn(btnArea23)
-            } else {
-                waveAnimation.playOn(btnArea31)
-                waveAnimation.playOn(btnArea32)
-                waveAnimation.playOn(btnArea33)
+            buttonList.forEach {
+                if (it.row == winningRegionInfo.rowCol) {
+                    waveAnimation.playOn(it.button)
+                }
             }
         }
     }
