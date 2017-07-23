@@ -6,6 +6,9 @@
     <string name="player_1">पहिलो खेलाडी</string>
     <string name="player_2">दोस्रो खेलाडी</string>
     <string name="input_date_of_birth">जन्म मिती</string>
+    <string name="error_dob">कृपया आफ्नो जन्म मिति भर्नुहोस ।</string>
+    <string name="error_name">कृपया खेलाडीको नाम भर्नुहोस ।</string>
+    <string name="error_over8">तपाईं यो खेल खेल्न ८ भन्दा बढी हुनु आवश्यक छ ।</string>
     <string name="label_winner">बिजेता!!</string>
     <string name="btn_change_language">भाषा परिवर्तन</string>
     <string name="label_languages">भाषाहरु</string>

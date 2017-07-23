@@ -5,6 +5,9 @@
     <string name="player_1">Player 1</string>
     <string name="player_2">Player 2</string>
     <string name="input_date_of_birth">Date of Birth</string>
+    <string name="error_dob">Please enter DOB.</string>
+    <string name="error_name">Please enter player names.</string>
+    <string name="error_over8">You need to be over 8 to play this game.</string>
     <string name="label_winner">Winner!!</string>
     <string name="label_languages">Languages</string>
     <string name="btn_change_language">Change</string>

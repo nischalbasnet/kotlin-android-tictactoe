@@ -4,25 +4,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.nbasnet.tictactoe.R
+import es.dmoral.toasty.Toasty
 
 /**
  * Adds toast extension
  */
 fun AppCompatActivity.toast(message: String, duration: Int = Toast.LENGTH_LONG): Unit {
-    Toast.makeText(this, message, duration).show()
+    Toasty.info(this, message, duration).show()
 }
 
 fun AppCompatActivity.failToast(message: String, duration: Int = Toast.LENGTH_LONG): Unit {
-    val toast = Toast.makeText(this, message, duration)
-    toast.view.setBackgroundColor(resources.getColor(R.color.red_400))
-    toast.show()
+    Toasty.error(this, message, duration).show()
 }
 
 fun AppCompatActivity.successToast(message: String, duration: Int = Toast.LENGTH_LONG): Unit {
-    val toast = Toast.makeText(this, message, duration)
-    toast.view.setBackgroundColor(resources.getColor(R.color.green_400))
-    toast.show()
+    Toasty.success(this, message, duration).show()
 }
 
 fun AppCompatActivity.startActivity(cls: Class<*>, payLoad: Bundle? = null): Unit {

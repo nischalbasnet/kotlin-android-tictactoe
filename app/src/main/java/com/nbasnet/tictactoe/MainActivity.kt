@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                         .duration(700)
                         .playOn(inputDOB)
 
-                failToast("Please enter DOB.")
+                failToast(resources.getString(R.string.error_dob))
             } else if (inputPlayer1Name.text.toString().isBlank() || inputPlayer2Name.text.toString().isBlank()) {
                 if (inputPlayer1Name.text.toString().isBlank()) {
                     YoYo.with(Techniques.Shake)
@@ -89,13 +89,13 @@ class MainActivity : AppCompatActivity() {
                             .duration(700)
                             .playOn(inputPlayer2Name)
                 }
-                failToast("Please enter player names")
+                failToast(resources.getString(R.string.error_name))
             } else {
                 val userEnteredDOB = DateTime.parse(inputDOB.text.toString(), formatter)
                 //calculate the age
                 val age = Years.yearsBetween(userEnteredDOB, currentDate)
 
-                if (age != null) {
+                if (age != null && age.years > 8) {
                     labelAgeResult.text = age.years.toString()
 
                     val gameUsers = Bundle()
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             .playOn(buttonPlayGame)
                 } else {
-                    failToast("You need to be over 18 to play this game.")
+                    failToast(resources.getString(R.string.error_over8))
                 }
             }
         }
