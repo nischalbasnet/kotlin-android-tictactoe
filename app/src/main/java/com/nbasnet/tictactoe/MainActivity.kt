@@ -1,32 +1,62 @@
 package com.nbasnet.tictactoe
 
-import com.nbasnet.extensions.activity.*
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.support.v7.app.AppCompatActivity
+import android.content.res.Configuration
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.nbasnet.extensions.activity.failToast
+import com.nbasnet.extensions.activity.startActivity
+import com.nbasnet.helpers.AppPreferences
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.Years
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     var _year: Int = 0
     var _month: Int = 0
     var _day: Int = 0
     val DATE_PICKER_DIALOG_ID = 0
-
     val formatter: DateTimeFormatter = DateTimeFormat.forPattern("MM/dd/yyyy")
+
+    lateinit var _sharePreference: AppPreferences
+
+    /**
+     * App strings constants
+     */
+    val APP_LANGUAGE_POS = "APP_LANGUAGE_POS"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _sharePreference = AppPreferences(this)
+        //set the language and local resource
+        val selectedLanguagePos = _sharePreference.preference.getInt(APP_LANGUAGE_POS, 0)
+        changeResourceLocal(selectedLanguagePos)
         setContentView(R.layout.activity_main)
 
         title = resources.getString(R.string.app_name)
+
+        //fill select language list
+        val languageList = ArrayAdapter.createFromResource(
+                this,
+                R.array.languages_list,
+                R.layout.support_simple_spinner_dropdown_item
+        )
+        selectLanguage.prompt = resources.getString(R.string.label_languages)
+        selectLanguage.adapter = languageList
+        selectLanguage.setSelection(selectedLanguagePos)
+        //change the language
+        changeLanguage.setOnClickListener {
+            changeResourceLocal(selectLanguage.selectedItemPosition)
+            recreate()
+        }
 
         //fill current date
         val currentDate = DateTime.now()
@@ -41,6 +71,7 @@ class MainActivity : AppCompatActivity() {
             showDialog(DATE_PICKER_DIALOG_ID)
         }
 
+        //set play game on click listener
         buttonPlayGame.setOnClickListener {
             if (inputDOB.text.isEmpty()) {
                 YoYo.with(Techniques.Shake)
@@ -85,6 +116,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
+     * change resource local
+     */
+    private fun changeResourceLocal(position: Int) {
+        val config = Configuration()
+        when (position) {
+            0 -> config.locale = Locale.ENGLISH
+            1 -> config.locale = Locale("ne", "Nepal")
+        }
+
+        resources.updateConfiguration(config, resources.displayMetrics)
+        //save the language in shared preference
+        _sharePreference.put(APP_LANGUAGE_POS, position)
+    }
+
+    /**
      * Perform action when the view resumes
      */
     override fun onPostResume() {
@@ -94,6 +140,9 @@ class MainActivity : AppCompatActivity() {
                 .playOn(buttonPlayGame)
     }
 
+    /**
+     * Add the date picker listener
+     */
     private val datePickerListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener {
         datePicker: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         run {
@@ -106,6 +155,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * On create dialog listener
+     */
     override fun onCreateDialog(dialogId: Int): Dialog? {
         if (dialogId == DATE_PICKER_DIALOG_ID) {
             return DatePickerDialog(this, datePickerListener, _year, _month, _day)

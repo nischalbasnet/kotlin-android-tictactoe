@@ -6,4 +6,10 @@
     <string name="player_2">Player 2</string>
     <string name="input_date_of_birth">Date of Birth</string>
     <string name="label_winner">Winner!!</string>
+    <string name="label_languages">Languages</string>
+    <string name="btn_change_language">Change</string>
+    <string-array name="languages_list">
+        <item>English</item>
+        <item>Nepali</item>
+    </string-array>
 </resources>

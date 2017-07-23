@@ -9,7 +9,6 @@
     </data>
 
     <TableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/gameArea"
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,15 +16,15 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:gravity="center">
 
             <ImageView
                 android:id="@+id/player1Active"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="start"
                 android:adjustViewBounds="false"
                 android:contentDescription="Active Icon"
                 android:cropToPadding="false"
@@ -34,16 +33,16 @@
 
             <TextView
                 android:id="@+id/labelWinnerBanner"
-                android:layout_width="wrap_content"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
             <ImageView
                 android:id="@+id/player2Active"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="end"
                 android:contentDescription="Active Icon"
                 android:visibility="visible"
                 app:srcCompat="@android:drawable/btn_star_big_on" />
@@ -51,7 +50,7 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="0dp"
             android:gravity="center">
 
@@ -82,67 +81,75 @@
 
         </TableRow>
 
-        <TableRow
+        <TableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/gameArea"
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center">
 
-            <Button
-                android:id="@+id/btnArea11"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/btnArea12"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
+                <Button
+                    android:id="@+id/btnArea11"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
 
-            <Button
-                android:id="@+id/btnArea13"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
-        </TableRow>
+                <Button
+                    android:id="@+id/btnArea12"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+                <Button
+                    android:id="@+id/btnArea13"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+            </TableRow>
 
-            <Button
-                android:id="@+id/btnArea21"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/btnArea22"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
+                <Button
+                    android:id="@+id/btnArea21"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
 
-            <Button
-                android:id="@+id/btnArea23"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
-        </TableRow>
+                <Button
+                    android:id="@+id/btnArea22"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+                <Button
+                    android:id="@+id/btnArea23"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+            </TableRow>
 
-            <Button
-                android:id="@+id/btnArea31"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
 
-            <Button
-                android:id="@+id/btnArea32"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
+                <Button
+                    android:id="@+id/btnArea31"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
 
-            <Button
-                android:id="@+id/btnArea33"
-                android:layout_width="110dp"
-                android:layout_height="110dp" />
-        </TableRow>
+                <Button
+                    android:id="@+id/btnArea32"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+
+                <Button
+                    android:id="@+id/btnArea33"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp" />
+            </TableRow>
+        </TableLayout>
     </TableLayout>
 </layout>

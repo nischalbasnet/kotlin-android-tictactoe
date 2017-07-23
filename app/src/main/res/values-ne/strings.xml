@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">अलू प्लस</string>
+    <string name="title_game_room">खेल मैदान</string>
+    <string name="btn_play_game">खेलौ</string>
+    <string name="player_1">पहिलो खेलाडी</string>
+    <string name="player_2">दोस्रो खेलाडी</string>
+    <string name="input_date_of_birth">जन्म मिती</string>
+    <string name="label_winner">बिजेता!!</string>
+    <string name="btn_change_language">भाषा परिवर्तन</string>
+    <string name="label_languages">भाषाहरु</string>
+    <string-array name="languages_list">
+        <item>अंग्रेजी</item>
+        <item>नेपाली</item>
+    </string-array>
+</resources>

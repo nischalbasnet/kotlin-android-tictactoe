@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import com.daimajia.androidanimations.library.Techniques
@@ -62,18 +63,19 @@ class TicTacToeActivity : AppCompatActivity() {
         setWinnerCurrentPlayerLabels()
 
         //List to hold the info about all the playable region
-        buttonList = listOf<BtnAreaInfo>(
-                BtnAreaInfo(1, 1, btnArea11),
-                BtnAreaInfo(1, 2, btnArea12),
-                BtnAreaInfo(1, 3, btnArea13),
-                BtnAreaInfo(2, 1, btnArea21),
-                BtnAreaInfo(2, 2, btnArea22),
-                BtnAreaInfo(2, 3, btnArea23),
-                BtnAreaInfo(3, 1, btnArea31),
-                BtnAreaInfo(3, 2, btnArea32),
-                BtnAreaInfo(3, 3, btnArea33)
-        )
+//        buttonList = listOf<BtnAreaInfo>(
+//                BtnAreaInfo(1, 1, btnArea11),
+//                BtnAreaInfo(1, 2, btnArea12),
+//                BtnAreaInfo(1, 3, btnArea13),
+//                BtnAreaInfo(2, 1, btnArea21),
+//                BtnAreaInfo(2, 2, btnArea22),
+//                BtnAreaInfo(2, 3, btnArea23),
+//                BtnAreaInfo(3, 1, btnArea31),
+//                BtnAreaInfo(3, 2, btnArea32),
+//                BtnAreaInfo(3, 3, btnArea33)
+//        )
 
+        buttonList = getAllPlayAreas(gameArea)
         /**
          * Add event handlers for all the button
          */
@@ -82,6 +84,35 @@ class TicTacToeActivity : AppCompatActivity() {
             it.button.setOnClickListener {
                 val btnAreaInfo = PlayAreaInfo(btnInfo.row, btnInfo.col)
                 selectArea(it, btnAreaInfo)
+            }
+        }
+    }
+
+    /**
+     * Get all playable button info
+     */
+    private fun getAllPlayAreas(viewGroup: ViewGroup): List<BtnAreaInfo> {
+        val playAreas = arrayListOf<BtnAreaInfo>()
+        findButtons(viewGroup, playAreas, 0)
+        return playAreas.toList()
+    }
+
+    /**
+     * Get all the buttons from the view group and fill it up in fillButtonList variable
+     */
+    private fun findButtons(viewGroup: ViewGroup, fillButtonList: ArrayList<BtnAreaInfo>, viewRow: Int) {
+        var row = viewRow
+        for (col in 0..viewGroup.childCount) {
+            val child = viewGroup.getChildAt(col)
+
+            if (child is ViewGroup) {
+                row++
+                findButtons(child, fillButtonList, row)
+            } else if (child is Button) {
+                val actualCol = col + 1
+                val btnInfo = BtnAreaInfo(viewRow, actualCol, child)
+                fillButtonList.add(btnInfo)
+//                child.text = "row=$row col=$actualCol"
             }
         }
     }
