@@ -9,6 +9,7 @@
     <string name="error_name">Please enter player names.</string>
     <string name="error_over5">You need to be over 5 to play this game.</string>
     <string name="label_winner">Winner!!</string>
+    <string name="label_draw">Draw!!</string>
     <string name="btn_play_again">Play Again!!</string>
     <string name="label_languages">Languages</string>
     <string name="btn_update_language">Update</string>

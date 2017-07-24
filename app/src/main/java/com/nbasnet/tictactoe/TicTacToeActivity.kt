@@ -55,7 +55,7 @@ class TicTacToeActivity : AppCompatActivity() {
                 PlayerGameInfo(_player1),
                 PlayerGameInfo(_player2)
         )
-        _gameController = TicTacToeGameController(_player1, _player2)
+        _gameController = TicTacToeGameController(_player1, _player2, _gridRow)
 
         //Bind the game info with the tictactoe_game view
         val binding: TictactoeGameBinding = DataBindingUtil.setContentView(this, R.layout.tictactoe_game)
@@ -180,7 +180,11 @@ class TicTacToeActivity : AppCompatActivity() {
                         YoYo.with(Techniques.SlideInUp)
                                 .duration(1000)
                                 .playOn(btnPlayAgain)
-                        successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
+
+                        if (_gameController.currentPlayer.isWinner)
+                            successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
+                        else
+                            successToast("Game Drawn!!")
                     }
 
                 } else {
@@ -205,19 +209,23 @@ class TicTacToeActivity : AppCompatActivity() {
     private fun setWinnerCurrentPlayerLabels(): Unit {
 
         if (_gameController.isGameFinished) {
-            labelWinnerBanner.text = resources.getString(R.string.label_winner)
-            labelWinner.text = _gameController.currentPlayer.name
-            YoYo.with(Techniques.Tada)
-                    .duration(1000)
-                    .repeat(3)
-                    .playOn(labelWinner)
+            if (_gameController.isDrawGame()) {
+                labelWinnerBanner.text = resources.getString(R.string.label_draw)
+            } else {
+                labelWinnerBanner.text = resources.getString(R.string.label_winner)
+                labelWinner.text = _gameController.currentPlayer.name
+                YoYo.with(Techniques.Tada)
+                        .duration(1000)
+                        .repeat(3)
+                        .playOn(labelWinner)
 
-            YoYo.with(Techniques.Wobble)
-                    .duration(1000)
-                    .repeat(3)
-                    .playOn(if (_gameController.isCurrentPlayer1()) player1Active else player2Active)
+                YoYo.with(Techniques.Wobble)
+                        .duration(1000)
+                        .repeat(3)
+                        .playOn(if (_gameController.isCurrentPlayer1()) player1Active else player2Active)
 
-            winningRegionAnimations(_gameController.currentPlayer.winningRow())
+                winningRegionAnimations(_gameController.currentPlayer.winningRow())
+            }
         } else {
             if (_gameController.isCurrentPlayer1()) {
                 slideOutLeftAnim.playOn(player2Active)

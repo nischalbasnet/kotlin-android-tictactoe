@@ -3,12 +3,17 @@ package com.nbasnet.tictactoe.controllers
 import com.nbasnet.tictactoe.models.PlayAreaInfo
 import com.nbasnet.tictactoe.models.Player
 
-class TicTacToeGameController(val player1: Player, val player2: Player) {
+class TicTacToeGameController(val player1: Player, val player2: Player, val gridRow: Int) {
     var currentPlayer: Player = player1
         private set
 
     var isGameFinished: Boolean = false
         private set
+
+    var currentRound: Int = 0
+        private set
+
+    val totalRounds = gridRow * gridRow
 
     private fun selectArea(areaInfo: PlayAreaInfo): GamePlayResponse {
         //check if the area is already selected
@@ -19,7 +24,8 @@ class TicTacToeGameController(val player1: Player, val player2: Player) {
             return GamePlayResponse(false, error)
         } else {
             currentPlayer.setSelectedArea(areaInfo)
-            isGameFinished = currentPlayer.isWinner
+            currentRound++
+            isGameFinished = currentPlayer.isWinner || currentRound >= totalRounds
 
             val message = if (isGameFinished) "Game over winner = ${currentPlayer.name}"
             else "${currentPlayer.name}'s turn over: selected ${areaInfo.row}x${areaInfo.column}"
@@ -53,6 +59,8 @@ class TicTacToeGameController(val player1: Player, val player2: Player) {
     fun isCurrentPlayer1(): Boolean {
         return currentPlayer == player1
     }
+
+    fun isDrawGame(): Boolean = if (isGameFinished) !currentPlayer.isWinner else false
 }
 
 data class GamePlayResponse(val success: Boolean, val message: String)

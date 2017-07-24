@@ -10,6 +10,7 @@
     <string name="error_name">कृपया खेलाडीको नाम भर्नुहोस ।</string>
     <string name="error_over5">तपाईं यो खेल खेल्न ५ भन्दा बढी हुनु आवश्यक छ ।</string>
     <string name="label_winner">बिजेता!!</string>
+    <string name="label_draw">बराबर!!</string>
     <string name="btn_play_again">फेरी खेलौ!!</string>
     <string name="btn_update_language">भाषा परिवर्तन</string>
     <string name="label_languages">भाषाहरु</string>
