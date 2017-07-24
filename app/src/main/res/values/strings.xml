@@ -10,7 +10,7 @@
     <string name="error_over8">You need to be over 8 to play this game.</string>
     <string name="label_winner">Winner!!</string>
     <string name="label_languages">Languages</string>
-    <string name="btn_change_language">Change</string>
+    <string name="btn_update_language">Update</string>
     <string-array name="languages_list">
         <item>English</item>
         <item>Nepali</item>

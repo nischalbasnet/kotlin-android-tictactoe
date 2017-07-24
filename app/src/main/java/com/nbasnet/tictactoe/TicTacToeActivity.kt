@@ -88,6 +88,15 @@ class TicTacToeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPostResume() {
+        super.onPostResume()
+
+        //roll in the game area table
+        YoYo.with(Techniques.ZoomIn)
+                .duration(1000)
+                .playOn(gameArea)
+    }
+
     /**
      * Get all playable button info
      */

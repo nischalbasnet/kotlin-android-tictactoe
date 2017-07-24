@@ -1,139 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nbasnet.tictactoe.MainActivity">
+    android:background="@mipmap/blue_bg">
 
-    <EditText
-        android:id="@+id/inputDOB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="@string/input_date_of_birth"
-        android:inputType="none"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Button
-        android:id="@+id/buttonPlayGame"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="118dp"
-        android:text="@string/btn_play_game"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputDOB" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/selectLanguage"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame">
+        android:layout_height="match_parent"
+        android:background="#98f2f2f2">
 
-        <TextView
-            android:id="@+id/labelCaclDescription"
+        <EditText
+            android:id="@+id/inputDOB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your current age is ="
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="@string/input_date_of_birth"
+            android:inputType="none"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Button
+            android:id="@+id/buttonPlayGame"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="118dp"
+            android:text="@string/btn_play_game"
+            android:textSize="18sp"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/inputDOB" />
 
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/selectLanguage"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame">
 
-        <TextView
-            android:id="@+id/labelAgeResult"
+            <TextView
+                android:id="@+id/labelCaclDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your current age is ="
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/inputDOB" />
+
+
+            <TextView
+                android:id="@+id/labelAgeResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/inputPlayer1Name"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/player_1"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/buttonPlayGame"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputDOB"
+            app:layout_constraintVertical_bias="0.483" />
+
+        <EditText
+            android:id="@+id/inputPlayer2Name"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/player_2"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/buttonPlayGame"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputDOB"
+            app:layout_constraintVertical_bias="0.474" />
+
+        <Spinner
+            android:id="@+id/selectLanguage"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:popupBackground="@color/blue_grey_100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/changeLanguage"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame"
+            app:layout_constraintVertical_bias="0.487" />
+
+        <Button
+            android:id="@+id/changeLanguage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toRightOf="parent" />
-    </LinearLayout>
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/blue_grey_400"
+            android:text="@string/btn_update_language"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame"
+            app:layout_constraintVertical_bias="0.498" />
 
-    <EditText
-        android:id="@+id/inputPlayer1Name"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/player_1"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPlayGame"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputDOB"
-        app:layout_constraintVertical_bias="0.483" />
-
-    <EditText
-        android:id="@+id/inputPlayer2Name"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/player_2"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/buttonPlayGame"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputDOB"
-        app:layout_constraintVertical_bias="0.474" />
-
-    <Spinner
-        android:id="@+id/selectLanguage"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:popupBackground="@color/blue_grey_100"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/changeLanguage"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame"
-        app:layout_constraintVertical_bias="0.487" />
-
-    <Button
-        android:id="@+id/changeLanguage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="24dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/blue_grey_400"
-        android:text="@string/btn_change_language"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame"
-        app:layout_constraintVertical_bias="0.498" />
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>
