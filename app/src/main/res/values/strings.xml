@@ -7,8 +7,9 @@
     <string name="input_date_of_birth">Date of Birth</string>
     <string name="error_dob">Please enter DOB.</string>
     <string name="error_name">Please enter player names.</string>
-    <string name="error_over8">You need to be over 8 to play this game.</string>
+    <string name="error_over5">You need to be over 5 to play this game.</string>
     <string name="label_winner">Winner!!</string>
+    <string name="btn_play_again">Play Again!!</string>
     <string name="label_languages">Languages</string>
     <string name="btn_update_language">Update</string>
     <string-array name="languages_list">

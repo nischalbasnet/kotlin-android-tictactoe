@@ -1,6 +1,7 @@
 package com.nbasnet.tictactoe
 
 import android.databinding.DataBindingUtil
+import android.opengl.Visibility
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -86,12 +87,27 @@ class TicTacToeActivity : AppCompatActivity() {
                 selectArea(it, btnAreaInfo)
             }
         }
+
+        btnPlayAgain.visibility = View.INVISIBLE
+        btnPlayAgain.setOnClickListener {
+            YoYo.with(Techniques.SlideOutDown)
+                    .duration(1000)
+                    .playOn(it)
+            YoYo.with(Techniques.ZoomOut)
+                    .duration(1000)
+                    .onEnd {
+                        recreate()
+                    }
+                    .playOn(gameArea)
+        }
     }
 
     override fun onPostResume() {
         super.onPostResume()
-
         //roll in the game area table
+        YoYo.with(Techniques.SlideInUp)
+                .duration(1000)
+                .playOn(btnPlayAgain)
         YoYo.with(Techniques.ZoomIn)
                 .duration(1000)
                 .playOn(gameArea)
@@ -160,6 +176,10 @@ class TicTacToeActivity : AppCompatActivity() {
 
                     toast(message, Toast.LENGTH_SHORT)
                     if (_gameController.isGameFinished) {
+                        btnPlayAgain.visibility = View.VISIBLE
+                        YoYo.with(Techniques.SlideInUp)
+                                .duration(1000)
+                                .playOn(btnPlayAgain)
                         successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
                     }
 

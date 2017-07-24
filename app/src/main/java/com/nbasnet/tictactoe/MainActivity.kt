@@ -95,9 +95,7 @@ class MainActivity : AppCompatActivity() {
                 //calculate the age
                 val age = Years.yearsBetween(userEnteredDOB, currentDate)
 
-                if (age != null && age.years > 8) {
-                    labelAgeResult.text = age.years.toString()
-
+                if (age != null && age.years > 4) {
                     val gameUsers = Bundle()
                     gameUsers.putString("player1", inputPlayer1Name.text.toString())
                     gameUsers.putString("player2", inputPlayer2Name.text.toString())
@@ -109,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             .playOn(buttonPlayGame)
                 } else {
-                    failToast(resources.getString(R.string.error_over8))
+                    failToast(resources.getString(R.string.error_over5))
                 }
             }
         }

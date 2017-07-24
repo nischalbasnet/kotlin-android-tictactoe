@@ -11,165 +11,185 @@
     <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/blue_bg">
+        android:background="@mipmap/blue_bg"
+        android:orientation="vertical">
 
-        <TableLayout
-            style="?android:attr/buttonBarStyle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#98060606"
-            android:gravity="center">
+            android:orientation="vertical">
 
-            <TableRow
+            <Button
+                android:id="@+id/btnPlayAgain"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:gravity="center">
+                android:layout_gravity="center"
+                android:drawableRight="@android:drawable/ic_menu_revert"
+                android:elevation="8dp"
+                android:gravity="center"
+                android:text="@string/btn_play_again" />
 
-                <ImageView
-                    android:id="@+id/player1Active"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:adjustViewBounds="false"
-                    android:contentDescription="Active Icon"
-                    android:cropToPadding="false"
-                    android:visibility="visible"
-                    app:srcCompat="@android:drawable/btn_star_big_on" />
-
-                <TextView
-                    android:id="@+id/labelWinnerBanner"
-                    android:layout_width="210dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white" />
-
-                <ImageView
-                    android:id="@+id/player2Active"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:contentDescription="Active Icon"
-                    android:visibility="visible"
-                    app:srcCompat="@android:drawable/btn_star_big_on" />
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/labelPlayer1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:text="@{gameInfo.player1Info.player.name}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/labelWinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@android:color/holo_green_dark"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/labelPlayer2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:text="@{gameInfo.player2Info.player.name}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="@color/white" />
-
-            </TableRow>
-
-            <TableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/gameArea"
+            <TableLayout
                 style="?android:attr/buttonBarStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@mipmap/tictactoe_board"
+                android:layout_height="match_parent"
                 android:gravity="center">
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
                     android:gravity="center">
 
-                    <Button
-                        android:id="@+id/btnArea11"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <ImageView
+                        android:id="@+id/player1Active"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:adjustViewBounds="false"
+                        android:contentDescription="Active Icon"
+                        android:cropToPadding="false"
+                        android:visibility="visible"
+                        app:srcCompat="@android:drawable/btn_star_big_on" />
 
-                    <Button
-                        android:id="@+id/btnArea12"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <TextView
+                        android:id="@+id/labelWinnerBanner"
+                        android:layout_width="210dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/white" />
 
-                    <Button
-                        android:id="@+id/btnArea13"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <ImageView
+                        android:id="@+id/player2Active"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:contentDescription="Active Icon"
+                        android:visibility="visible"
+                        app:srcCompat="@android:drawable/btn_star_big_on" />
+
                 </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
                     android:gravity="center">
 
-                    <Button
-                        android:id="@+id/btnArea21"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <TextView
+                        android:id="@+id/labelPlayer1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:text="@{gameInfo.player1Info.player.name}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/white" />
 
-                    <Button
-                        android:id="@+id/btnArea22"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <TextView
+                        android:id="@+id/labelWinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@android:color/holo_green_dark"
+                        android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/btnArea23"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <TextView
+                        android:id="@+id/labelPlayer2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="@{gameInfo.player2Info.player.name}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/white" />
+
                 </TableRow>
 
-                <TableRow
+                <TableLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/gameArea"
+                    style="?android:attr/buttonBarStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/tictactoe_board"
                     android:gravity="center">
 
-                    <Button
-                        android:id="@+id/btnArea31"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
 
-                    <Button
-                        android:id="@+id/btnArea32"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
+                        <Button
+                            android:id="@+id/btnArea11"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
 
-                    <Button
-                        android:id="@+id/btnArea33"
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:background="@android:color/transparent" />
-                </TableRow>
+                        <Button
+                            android:id="@+id/btnArea12"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+
+                        <Button
+                            android:id="@+id/btnArea13"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/btnArea21"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+
+                        <Button
+                            android:id="@+id/btnArea22"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+
+                        <Button
+                            android:id="@+id/btnArea23"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center">
+
+                        <Button
+                            android:id="@+id/btnArea31"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+
+                        <Button
+                            android:id="@+id/btnArea32"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+
+                        <Button
+                            android:id="@+id/btnArea33"
+                            android:layout_width="110dp"
+                            android:layout_height="110dp"
+                            android:background="@android:color/transparent" />
+                    </TableRow>
+                </TableLayout>
             </TableLayout>
-        </TableLayout>
+
+        </LinearLayout>
     </LinearLayout>
 </layout>
