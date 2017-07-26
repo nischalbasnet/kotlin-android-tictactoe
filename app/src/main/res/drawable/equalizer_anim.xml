@@ -1,0 +1,145 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+            <group android:name="group">
+                <group android:name="group_3">
+                    <path
+                        android:name="path_1"
+                        android:pathData="M 14.8 18 M 12.8 18 C 12.8 16.895 13.695 16 14.8 16 C 15.905 16 16.8 16.895 16.8 18 C 16.8 19.105 15.905 20 14.8 20 C 13.695 20 12.8 19.105 12.8 18"
+                        android:fillColor="#FFAD29"/>
+                </group>
+                <group android:name="group_2">
+                    <path
+                        android:name="path_2"
+                        android:pathData="M 15.2 8.8 M 10.4 8.8 C 10.4 6.149 12.549 4 15.2 4 C 17.851 4 20 6.149 20 8.8 C 20 11.451 17.851 13.6 15.2 13.6 C 12.549 13.6 10.4 11.451 10.4 8.8"
+                        android:fillColor="#19B589"/>
+                </group>
+                <group android:name="group_1">
+                    <path
+                        android:name="path"
+                        android:pathData="M 7.2 14.4 M 4 14.4 C 4 12.633 5.433 11.2 7.2 11.2 C 8.967 11.2 10.4 12.633 10.4 14.4 C 10.4 16.167 8.967 17.6 7.2 17.6 C 5.433 17.6 4 16.167 4 14.4"
+                        android:fillColor="#FF2151"/>
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="group_1">
+        <aapt:attr name="android:animation">
+            <set xmlns:android="http://schemas.android.com/apk/res/android">
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:duration="1000"
+                    android:valueFrom="0"
+                    android:valueTo="-10"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:duration="1000"
+                    android:valueFrom="1"
+                    android:valueTo="0.5"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:duration="1000"
+                    android:valueFrom="1"
+                    android:valueTo="0.5"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:startOffset="1000"
+                    android:duration="1000"
+                    android:valueFrom="-10"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleY"
+                    android:startOffset="1000"
+                    android:duration="1000"
+                    android:valueFrom="0.5"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="scaleX"
+                    android:startOffset="1000"
+                    android:duration="1000"
+                    android:valueFrom="0.5"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="group_2">
+        <aapt:attr name="android:animation">
+            <set xmlns:android="http://schemas.android.com/apk/res/android">
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:duration="1000"
+                    android:valueFrom="0"
+                    android:valueTo="30"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:startOffset="1000"
+                    android:duration="1000"
+                    android:valueFrom="30"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="group_3">
+        <aapt:attr name="android:animation">
+            <set xmlns:android="http://schemas.android.com/apk/res/android">
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:duration="1000"
+                    android:valueFrom="0"
+                    android:valueTo="-25"
+                    android:valueType="floatType"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+                <objectAnimator
+                    android:propertyName="rotation"
+                    android:startOffset="1000"
+                    android:duration="1000"
+                    android:valueFrom="-25"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:repeatCount="infinite"
+                    android:repeatMode="reverse"
+                    android:interpolator="@android:anim/overshoot_interpolator"/>
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

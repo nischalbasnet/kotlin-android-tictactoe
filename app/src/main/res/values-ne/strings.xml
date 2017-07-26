@@ -5,6 +5,7 @@
     <string name="btn_play_game">खेलौ</string>
     <string name="player_1">पहिलो खेलाडी</string>
     <string name="player_2">दोस्रो खेलाडी</string>
+    <string name="label_player_ai">कम्प्युटर खेलाडी</string>
     <string name="input_date_of_birth">जन्म मिती</string>
     <string name="error_dob">कृपया आफ्नो जन्म मिति भर्नुहोस ।</string>
     <string name="error_name">कृपया खेलाडीको नाम भर्नुहोस ।</string>
@@ -12,6 +13,7 @@
     <string name="label_winner">बिजेता!!</string>
     <string name="label_draw">बराबर!!</string>
     <string name="btn_play_again">फेरी खेलौ!!</string>
+    <string name="label_thinking">सोच्दै!!</string>
     <string name="btn_update_language">भाषा परिवर्तन</string>
     <string name="label_languages">भाषाहरु</string>
     <string-array name="languages_list">

@@ -1,8 +1,9 @@
 package com.nbasnet.tictactoe
 
 import android.databinding.DataBindingUtil
-import android.opengl.Visibility
+import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +12,17 @@ import android.widget.Toast
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.nbasnet.extensions.activity.failToast
+import com.nbasnet.extensions.activity.fullScreenMode
 import com.nbasnet.extensions.activity.successToast
 import com.nbasnet.extensions.activity.toast
+import com.nbasnet.tictactoe.ai.AIFactory
+import com.nbasnet.tictactoe.ai.AIPlayerTypes
+import com.nbasnet.tictactoe.ai.IPlayGameAI
 import com.nbasnet.tictactoe.controllers.TicTacToeGameController
 import com.nbasnet.tictactoe.databinding.TictactoeGameBinding
 import com.nbasnet.tictactoe.models.*
 import kotlinx.android.synthetic.main.tictactoe_game.*
+import java.util.*
 
 class TicTacToeActivity : AppCompatActivity() {
     private lateinit var _fullGameInfo: GameInfo
@@ -25,12 +31,16 @@ class TicTacToeActivity : AppCompatActivity() {
     private lateinit var buttonList: List<BtnAreaInfo>
     private var _gridRow: Int = 3
     private lateinit var _frontDiagonalRows: Map<Int, Int>
+    private lateinit var _aITaskHandler: Handler
 
     /**
      * View oncreate function
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //set up the window mode
+        fullScreenMode()
+
         setContentView(R.layout.tictactoe_game)
 
         _gridRow = 3
@@ -47,10 +57,14 @@ class TicTacToeActivity : AppCompatActivity() {
         val playersInfo = intent.getBundleExtra("payload")
         val inP1Name = playersInfo.getString("player1")
         val inP2Name = playersInfo.getString("player2")
+        val isP1AI = playersInfo.getBoolean("player1AI")
+        val isP2AI = playersInfo.getBoolean("player2AI")
+
+        if (isP1AI || isP2AI) _aITaskHandler = Handler()
 
         //generate player classes and create the game info and controller classes
-        val _player1 = getPlayer(1, inP1Name)
-        val _player2 = getPlayer(2, inP2Name)
+        val _player1 = getPlayer(1, inP1Name, isP1AI)
+        val _player2 = getPlayer(2, inP2Name, isP2AI)
         _fullGameInfo = GameInfo(
                 PlayerGameInfo(_player1),
                 PlayerGameInfo(_player2)
@@ -64,18 +78,6 @@ class TicTacToeActivity : AppCompatActivity() {
         setWinnerCurrentPlayerLabels()
 
         //List to hold the info about all the playable region
-//        buttonList = listOf<BtnAreaInfo>(
-//                BtnAreaInfo(1, 1, btnArea11),
-//                BtnAreaInfo(1, 2, btnArea12),
-//                BtnAreaInfo(1, 3, btnArea13),
-//                BtnAreaInfo(2, 1, btnArea21),
-//                BtnAreaInfo(2, 2, btnArea22),
-//                BtnAreaInfo(2, 3, btnArea23),
-//                BtnAreaInfo(3, 1, btnArea31),
-//                BtnAreaInfo(3, 2, btnArea32),
-//                BtnAreaInfo(3, 3, btnArea33)
-//        )
-
         buttonList = getAllPlayAreas(gameArea)
         /**
          * Add event handlers for all the button
@@ -88,17 +90,34 @@ class TicTacToeActivity : AppCompatActivity() {
             }
         }
 
+        thinkingContents.visibility = View.INVISIBLE
+        //set up play again button
         btnPlayAgain.visibility = View.INVISIBLE
         btnPlayAgain.setOnClickListener {
-            YoYo.with(Techniques.SlideOutDown)
+            val animSlideDown = YoYo.with(Techniques.SlideOutDown)
                     .duration(1000)
-                    .playOn(it)
+            animSlideDown.playOn(it)
+            animSlideDown.playOn(player1Active)
+            animSlideDown.playOn(player2Active)
             YoYo.with(Techniques.ZoomOut)
                     .duration(1000)
                     .onEnd {
-                        recreate()
+                        finish()
+                        overridePendingTransition(0, 0)
+                        startActivity(intent)
+                        overridePendingTransition(0, 0)
                     }
                     .playOn(gameArea)
+        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        //animate gameboard
+        val board = gameArea.background
+        when (board) {
+            is Animatable -> board.start()
         }
     }
 
@@ -108,9 +127,6 @@ class TicTacToeActivity : AppCompatActivity() {
         YoYo.with(Techniques.SlideInUp)
                 .duration(1000)
                 .playOn(btnPlayAgain)
-        YoYo.with(Techniques.ZoomIn)
-                .duration(1000)
-                .playOn(gameArea)
     }
 
     /**
@@ -137,7 +153,6 @@ class TicTacToeActivity : AppCompatActivity() {
                 val actualCol = col + 1
                 val btnInfo = BtnAreaInfo(viewRow, actualCol, child)
                 fillButtonList.add(btnInfo)
-//                child.text = "row=$row col=$actualCol"
             }
         }
     }
@@ -145,55 +160,98 @@ class TicTacToeActivity : AppCompatActivity() {
     /**
      * Stub method to generated and return player
      */
-    private fun getPlayer(playerNo: Int, name: String? = null): Player {
-        return if (playerNo == 1)
-            Player(name ?: "Nischal", R.drawable.tictactoe_cross_55dp, R.color.green_200)
-        else
-            Player(name ?: "Niluja", R.drawable.tictactoe_circle_55dp, R.color.blue_300)
+    private fun getPlayer(playerNo: Int, name: String? = null, isAI: Boolean = false): Player {
+        val aiController: IPlayGameAI? = if (isAI) AIFactory.getAIPlayer(AIPlayerTypes.EASY) else null
 
+        return if (playerNo == 1)
+            Player(name ?: "Player1", R.drawable.tictactoe_cross_anim, R.color.green_400, aiController)
+        else
+            Player(name ?: "Player2", R.drawable.tictactoe_circle_anim, R.color.blue_400, aiController)
     }
 
     /**
      * Perform the task for region selected with given areaInfo
      */
     private fun selectArea(area: View, areaInfo: PlayAreaInfo) {
-        var playSuccess = false
         //play the next round and update the view with the proper values
-        _gameController.playNextRound(areaInfo, { (success, message) ->
-            run {
-                playSuccess = success
-                if (success) {
+        _gameController.playNextRound(
+                selectedAreaInfo = areaInfo,
+                onSuccess = { (_, message) ->
                     val customUserSource = _gameController.currentPlayer.getDrawableSymbol(resources, theme)
                     if (customUserSource == null) {
                         area.setBackgroundResource(_gameController.currentPlayer.symbolResource)
                     } else {
                         area.background = customUserSource
+                        when (customUserSource) {
+                            is Animatable -> customUserSource.start()
+                        }
                     }
-
-                    YoYo.with(Techniques.Pulse)
-                            .duration(700)
-                            .playOn(area)
 
                     toast(message, Toast.LENGTH_SHORT)
-                    if (_gameController.isGameFinished) {
-                        btnPlayAgain.visibility = View.VISIBLE
-                        YoYo.with(Techniques.SlideInUp)
-                                .duration(1000)
-                                .playOn(btnPlayAgain)
+                },
+                onGameFinished = {
+                    btnPlayAgain.visibility = View.VISIBLE
+                    YoYo.with(Techniques.SlideInUp)
+                            .duration(1000)
+                            .playOn(btnPlayAgain)
 
-                        if (_gameController.currentPlayer.isWinner)
-                            successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
-                        else
-                            successToast("Game Drawn!!")
-                    }
-
-                } else {
+                    if (_gameController.currentPlayer.isWinner)
+                        successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
+                    else
+                        successToast("Game Drawn!!")
+                },
+                onFail = { (_, message) ->
                     failToast(message, Toast.LENGTH_SHORT)
-                }
-            }
-        })
+                },
+                onPlayerChange = { nextPlayer: Player ->
+                    setWinnerCurrentPlayerLabels()
 
-        if (playSuccess) setWinnerCurrentPlayerLabels()
+                    if (nextPlayer.isAI && nextPlayer.aIController != null) {
+                        letAIPlayNextRound(
+                                nextPlayer.aIController,
+                                2000,
+                                beforePlay = {
+                                    thinkingContents.visibility = View.VISIBLE
+                                    val thinkAnim = imageThinking.drawable
+                                    when (thinkAnim) {
+                                        is Animatable -> thinkAnim.start()
+                                    }
+                                    YoYo.with(Techniques.BounceInDown)
+                                            .duration(700)
+                                            .playOn(imageThinking)
+                                },
+                                afterPlay = {
+                                    thinkingContents.visibility = View.INVISIBLE
+                                }
+                        )
+                    }
+                }
+        )
+    }
+
+    /**
+     * Let the ai player play the next round
+     */
+    private fun letAIPlayNextRound(
+            aIController: IPlayGameAI,
+            delayInMs: Long,
+            beforePlay: () -> Unit = {},
+            afterPlay: () -> Unit = {}
+    ) {
+        beforePlay()
+        _aITaskHandler.postDelayed({
+            //give control to the ai to play next round here
+            val nextAreaInfo = aIController.getNextPlayAreaInfo(_gameController)
+
+            //get the button
+            val btnToClick = buttonList.firstOrNull {
+                it.col == nextAreaInfo.column && it.row == nextAreaInfo.row
+            }
+
+            //call the buttons on click
+            btnToClick?.button?.callOnClick()
+            afterPlay()
+        }, delayInMs)
     }
 
     /**

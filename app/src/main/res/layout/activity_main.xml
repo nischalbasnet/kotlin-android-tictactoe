@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/blue_bg">
@@ -40,7 +41,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="118dp"
             android:text="@string/btn_play_game"
-            android:textSize="18sp"
+            android:textSize="16sp"
             app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -110,6 +111,33 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPlayGame"
             app:layout_constraintVertical_bias="0.498" />
+
+        <CheckBox
+            android:id="@+id/ckboxPlayer2AI"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_player_ai"
+            app:layout_constraintBottom_toTopOf="@+id/buttonPlayGame"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputPlayer2Name" />
+
+        <CheckBox
+            android:id="@+id/ckboxPlayer1AI"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/label_player_ai"
+            app:layout_constraintBottom_toTopOf="@+id/buttonPlayGame"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputPlayer1Name"
+            app:layout_constraintVertical_bias="0.555" />
 
     </android.support.constraint.ConstraintLayout>
 </LinearLayout>

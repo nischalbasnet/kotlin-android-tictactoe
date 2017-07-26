@@ -3,13 +3,17 @@ package com.nbasnet.tictactoe
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.res.Configuration
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.nbasnet.extensions.activity.failToast
+import com.nbasnet.extensions.activity.getInputMethodManager
+import com.nbasnet.extensions.activity.hideKeyboard
 import com.nbasnet.extensions.activity.startActivity
 import com.nbasnet.helpers.AppPreferences
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         _sharePreference = AppPreferences(this)
         //set the language and local resource
         val selectedLanguagePos = _sharePreference.preference.getInt(APP_LANGUAGE_POS, 0)
+        val savedAge = _sharePreference.preference.getInt("age", 0)
         changeResourceLocal(selectedLanguagePos)
         setContentView(R.layout.activity_main)
 
@@ -64,16 +69,24 @@ class MainActivity : AppCompatActivity() {
         _month = currentDate.monthOfYear
         _day = currentDate.dayOfMonth
 
-        inputDOB.isFocusable = false
-        inputDOB.isCursorVisible = false
+        //set up date of birth field
+        if (savedAge < 5) {
+            inputDOB.isFocusable = false
+            inputDOB.isCursorVisible = false
 
-        inputDOB.setOnClickListener {
-            showDialog(DATE_PICKER_DIALOG_ID)
+            inputDOB.setOnClickListener {
+                showDialog(DATE_PICKER_DIALOG_ID)
+            }
+        } else {
+            inputDOB.visibility = View.INVISIBLE
         }
 
         //set play game on click listener
         buttonPlayGame.setOnClickListener {
-            if (inputDOB.text.isEmpty()) {
+            // hide virtual keyboard
+            hideKeyboard(getInputMethodManager())
+
+            if (savedAge < 5 && inputDOB.text.isEmpty()) {
                 YoYo.with(Techniques.Shake)
                         .duration(700)
                         .playOn(inputDOB)
@@ -91,14 +104,23 @@ class MainActivity : AppCompatActivity() {
                 }
                 failToast(resources.getString(R.string.error_name))
             } else {
-                val userEnteredDOB = DateTime.parse(inputDOB.text.toString(), formatter)
                 //calculate the age
-                val age = Years.yearsBetween(userEnteredDOB, currentDate)
+                val age: Int = if (savedAge > 4) {
+                    savedAge
+                } else {
+                    val userEnteredDOB = DateTime.parse(inputDOB.text.toString(), formatter)
+                    Years.yearsBetween(userEnteredDOB, currentDate).years
+                }
 
-                if (age != null && age.years > 4) {
+                if (age > 4) {
+                    //save the users age
+                    _sharePreference.put("age", age)
+
                     val gameUsers = Bundle()
                     gameUsers.putString("player1", inputPlayer1Name.text.toString())
                     gameUsers.putString("player2", inputPlayer2Name.text.toString())
+                    gameUsers.putBoolean("player1AI", ckboxPlayer1AI.isChecked)
+                    gameUsers.putBoolean("player2AI", ckboxPlayer2AI.isChecked)
 
                     YoYo.with(Techniques.Hinge)
                             .duration(1000)
@@ -142,7 +164,7 @@ class MainActivity : AppCompatActivity() {
      * Add the date picker listener
      */
     private val datePickerListener: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener {
-        datePicker: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
+        _: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int ->
         run {
             _year = year
             _month = monthOfYear

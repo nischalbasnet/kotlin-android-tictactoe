@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data class="TictactoeGameBinding">
 
@@ -8,7 +9,7 @@
             type="com.nbasnet.tictactoe.models.GameInfo" />
     </data>
 
-    <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/blue_bg"
@@ -30,6 +31,30 @@
                 android:elevation="8dp"
                 android:gravity="center"
                 android:text="@string/btn_play_again" />
+
+            <LinearLayout
+                android:id="@+id/thinkingContents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/labelThinking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="@string/label_thinking"
+                    android:textColor="@color/white" />
+
+                <ImageView
+                    android:id="@+id/imageThinking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/equalizer_anim" />
+            </LinearLayout>
 
             <TableLayout
                 style="?android:attr/buttonBarStyle"
@@ -113,7 +138,7 @@
                     style="?android:attr/buttonBarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@mipmap/tictactoe_board"
+                    android:background="@drawable/tictactoe_board_anim"
                     android:gravity="center">
 
                     <TableRow
@@ -123,20 +148,20 @@
 
                         <Button
                             android:id="@+id/btnArea11"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
 
                         <Button
                             android:id="@+id/btnArea12"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
 
                         <Button
                             android:id="@+id/btnArea13"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
                     </TableRow>
 
@@ -147,20 +172,20 @@
 
                         <Button
                             android:id="@+id/btnArea21"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
 
                         <Button
                             android:id="@+id/btnArea22"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
 
                         <Button
                             android:id="@+id/btnArea23"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
                     </TableRow>
 
@@ -171,20 +196,20 @@
 
                         <Button
                             android:id="@+id/btnArea31"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
 
                         <Button
                             android:id="@+id/btnArea32"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
 
                         <Button
                             android:id="@+id/btnArea33"
-                            android:layout_width="110dp"
-                            android:layout_height="110dp"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
                             android:background="@android:color/transparent" />
                     </TableRow>
                 </TableLayout>

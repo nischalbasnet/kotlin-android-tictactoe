@@ -5,10 +5,16 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
+import com.nbasnet.tictactoe.ai.IPlayGameAI
 
-data class Player(val name: String, val symbolResource: Int, val color: Int) {
+data class Player(
+        val name: String,
+        val symbolResource: Int,
+        val color: Int,
+        val aIController: IPlayGameAI? = null
+) {
     val maxRow: Int = 3
-    var isActive: Boolean = false
+    val isAI: Boolean = aIController != null
     private val _selectedAreas = mutableListOf<PlayAreaInfo>()
     var isWinner = false
         private set
