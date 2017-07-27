@@ -15,6 +15,22 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
 
     val totalRounds = gridRow * gridRow
 
+    lateinit var frontDiagonalRows: List<PlayAreaInfo>
+        private set
+
+    init {
+        loadInitialValues()
+    }
+
+    private fun loadInitialValues(): Unit {
+        val tmpDiagonalRows = mutableListOf<PlayAreaInfo>()
+        for ((subDiagonal, i) in (1..gridRow).withIndex()) {
+            tmpDiagonalRows.add(PlayAreaInfo(i, gridRow - subDiagonal))
+        }
+
+        frontDiagonalRows = tmpDiagonalRows.toList()
+    }
+
     private fun selectArea(areaInfo: PlayAreaInfo): GamePlayResponse {
         //check if the area is already selected
         if (player1.isSelected(areaInfo) || player2.isSelected(areaInfo) || isGameFinished) {
@@ -23,7 +39,7 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
             //return error
             return GamePlayResponse(false, error)
         } else {
-            currentPlayer.setSelectedArea(areaInfo)
+            currentPlayer.setSelectedArea(areaInfo, this)
             currentRound++
             isGameFinished = currentPlayer.isWinner || currentRound >= totalRounds
 
@@ -92,6 +108,21 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
     fun isAreaPlayable(selection: PlayAreaInfo): Boolean {
         return !(currentPlayer.isSelected(selection) || getNextPlayer().isSelected(selection))
     }
+
+    /**
+     * Checks and returns a single winning playareainfo for the next player
+     */
+    fun getNextPlayersWiningAreas(): List<PlayAreaInfo> {
+        return if (isGameFinished) mutableListOf()
+        else getNextPlayer().getWinningAreas(this)
+    }
+
+    fun getCurrentPlayersWinningAreas(): List<PlayAreaInfo> {
+        return if (isGameFinished) mutableListOf()
+        else currentPlayer.getWinningAreas(this)
+    }
+
+    var canHumanPlay: Boolean = true
 }
 
 data class GamePlayResponse(val success: Boolean, val message: String)

@@ -14,6 +14,7 @@
     <string name="label_draw">बराबर!!</string>
     <string name="btn_play_again">फेरी खेलौ!!</string>
     <string name="label_thinking">सोच्दै!!</string>
+    <string name="error_wait_for_turn">कृपया आफ्नो पालोको प्रतीक्ष्य गर्नुहोस!!</string>
     <string name="btn_update_language">भाषा परिवर्तन</string>
     <string name="label_languages">भाषाहरु</string>
     <string-array name="languages_list">

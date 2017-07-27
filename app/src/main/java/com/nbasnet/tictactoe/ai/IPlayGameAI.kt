@@ -7,8 +7,7 @@ import com.nbasnet.tictactoe.models.PlayAreaInfo
  * Created by nbasnet on 7/25/17.
  */
 interface IPlayGameAI {
-    fun playRound(gameController: TicTacToeGameController)
-    fun play(selectedAreaInfo: PlayAreaInfo)
+    fun playRound(gameController: TicTacToeGameController): Unit
     fun getNextPlayAreaInfo(gameController: TicTacToeGameController): PlayAreaInfo
 }
 

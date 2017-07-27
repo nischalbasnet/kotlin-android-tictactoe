@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.support.v4.content.res.ResourcesCompat
 import android.util.Log
 import com.nbasnet.tictactoe.ai.IPlayGameAI
+import com.nbasnet.tictactoe.controllers.TicTacToeGameController
 
 data class Player(
         val name: String,
@@ -50,7 +51,7 @@ data class Player(
     /**
      * Set the selected area for user and perform calculation for win
      */
-    fun setSelectedArea(selectArea: PlayAreaInfo): Player {
+    fun setSelectedArea(selectArea: PlayAreaInfo, gameController: TicTacToeGameController): Player {
         _selectedAreas.add(selectArea)
 
         _scoreMap["rowx${selectArea.row}"] = (_scoreMap["rowx${selectArea.row}"] ?: 0) + 1
@@ -60,16 +61,17 @@ data class Player(
         isWinner = checkForWinner(_scoreMap["colx${selectArea.column}"] ?: 0)
 
         if (!isWinner && selectArea.isDiagonal) {
-            if (selectArea.row == 2) {
+            if (selectArea.row == selectArea.column) {
+                //is a back diagonal
                 _scoreMap["backD"] = (_scoreMap["backD"] ?: 0) + 1
-                _scoreMap["forwardD"] = (_scoreMap["forwardD"] ?: 0) + 1
-            } else if (selectArea.row == selectArea.column) {
-                _scoreMap["backD"] = (_scoreMap["backD"] ?: 0) + 1
-            } else {
-                _scoreMap["forwardD"] = (_scoreMap["forwardD"] ?: 0) + 1
+                isWinner = checkForWinner(_scoreMap["backD"] ?: 0)
             }
-            isWinner = checkForWinner(_scoreMap["forwardD"] ?: 0)
-            isWinner = checkForWinner(_scoreMap["backD"] ?: 0)
+            //check for front diagonal
+            if (gameController.frontDiagonalRows.contains(PlayAreaInfo(selectArea.row, selectArea.column))) {
+                //is a front diagonal point
+                _scoreMap["forwardD"] = (_scoreMap["forwardD"] ?: 0) + 1
+                isWinner = checkForWinner(_scoreMap["forwardD"] ?: 0)
+            }
         }
 
         if (isWinner) Log.v(LOG_TAG, "$name won the game ${_selectedAreas.toString()}")
@@ -80,27 +82,15 @@ data class Player(
     /**
      * Return the winning row or column or diagonal
      */
-    fun winningRow(): WinningRegionInfo {
-        var region = RegionType.NONE
-        var rowCol = 0
-
+    fun winningRow(): FullRegionInfo {
+        var returnRegionInfo = FullRegionInfo(0, RegionType.NONE)
         for ((regionInfo, score) in _scoreMap) {
             if (score > maxRow - 1) {
-                if (regionInfo == "forwardD") {
-                    region = RegionType.FORWARD_DIAGONAL
-                    rowCol = 0
-                } else if (regionInfo == "backD") {
-                    region = RegionType.BACK_DIAGONAL
-                    rowCol = 0
-                } else {
-                    val regionContents = regionInfo.split("x")
-                    region = if (regionContents.first() == "row") RegionType.ROW else RegionType.COL
-                    rowCol = regionContents.last().toInt()
-                }
+                returnRegionInfo = FullRegionInfo.getFromPlayerScoreMap(regionInfo)
             }
         }
 
-        return WinningRegionInfo(rowCol, region)
+        return returnRegionInfo
     }
 
     /**
@@ -109,9 +99,83 @@ data class Player(
     private fun checkForWinner(value: Int): Boolean {
         return if (isWinner) isWinner else value > maxRow - 1
     }
+
+    fun getWinningAreas(gameController: TicTacToeGameController): List<PlayAreaInfo> {
+        val winningRegion = mutableListOf<PlayAreaInfo>()
+        val rowColSeq = 1..maxRow
+        for ((regionInfo, score) in _scoreMap) {
+            if (score == maxRow - 1) {
+                //this region has winning area get the winning point now
+                val fullRegionInfo = FullRegionInfo.getFromPlayerScoreMap(regionInfo)
+                if (fullRegionInfo.regionType == RegionType.COL) {
+                    val winCol = fullRegionInfo.rowCol
+                    val selectedRows: List<Int> = _selectedAreas
+                            .filter { it.column == winCol }
+                            .map { it.row }
+
+                    val winRow: Int? = rowColSeq.subtract(selectedRows).firstOrNull()
+                    //add if winning row is present
+                    if (winRow != null) {
+                        val playArea = PlayAreaInfo(winRow, winCol)
+                        if (gameController.isAreaPlayable(playArea)) winningRegion.add(playArea)
+                    }
+                } else if (fullRegionInfo.regionType == RegionType.ROW) {
+                    val winRow = fullRegionInfo.rowCol
+                    val selectedCols: List<Int> = _selectedAreas
+                            .filter { it.row == winRow }
+                            .map { it.column }
+
+                    val winCol: Int? = rowColSeq.subtract(selectedCols).firstOrNull()
+                    //add if winning col is present
+                    if (winCol != null) {
+                        val playArea = PlayAreaInfo(winRow, winCol)
+                        if (gameController.isAreaPlayable(playArea)) winningRegion.add(playArea)
+                    }
+                } else if (fullRegionInfo.regionType == RegionType.BACK_DIAGONAL) {
+                    val selectedRows = _selectedAreas
+                            .filter { it.row == it.column }
+                            .map { it.row }
+
+                    val winRowCol: Int? = rowColSeq.subtract(selectedRows).firstOrNull()
+                    //add if winning col is present
+                    if (winRowCol != null) {
+                        val playArea = PlayAreaInfo(winRowCol, winRowCol)
+                        if (gameController.isAreaPlayable(playArea)) winningRegion.add(playArea)
+                    }
+                } else if (fullRegionInfo.regionType == RegionType.FORWARD_DIAGONAL) {
+                    //TODO implement this
+                    val selectRegions = gameController.frontDiagonalRows.subtract(_selectedAreas)
+                            .filter { gameController.isAreaPlayable(it) }
+                    winningRegion.addAll(selectRegions)
+                }
+            }
+        }
+        return winningRegion
+    }
 }
 
-data class WinningRegionInfo(val rowCol: Int, val regionType: RegionType)
+data class FullRegionInfo(val rowCol: Int, val regionType: RegionType) {
+    companion object {
+        fun getFromPlayerScoreMap(scoreKey: String): FullRegionInfo {
+            val region: RegionType
+            val rowCol: Int
+
+            if (scoreKey == "forwardD") {
+                region = RegionType.FORWARD_DIAGONAL
+                rowCol = 0
+            } else if (scoreKey == "backD") {
+                region = RegionType.BACK_DIAGONAL
+                rowCol = 0
+            } else {
+                val regionContents = scoreKey.split("x")
+                region = if (regionContents.first() == "row") RegionType.ROW else RegionType.COL
+                rowCol = regionContents.last().toInt()
+            }
+
+            return FullRegionInfo(rowCol, region)
+        }
+    }
+}
 
 enum class RegionType {
     COL, ROW, FORWARD_DIAGONAL, BACK_DIAGONAL, NONE

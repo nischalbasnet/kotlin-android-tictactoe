@@ -30,9 +30,9 @@ class TicTacToeActivity : AppCompatActivity() {
 
     private lateinit var buttonList: List<BtnAreaInfo>
     private var _gridRow: Int = 3
-    private lateinit var _frontDiagonalRows: Map<Int, Int>
     private lateinit var _aITaskHandler: Handler
 
+    private val DEBUG_MODE = false
     /**
      * View oncreate function
      */
@@ -40,40 +40,13 @@ class TicTacToeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //set up the window mode
         fullScreenMode()
-
         setContentView(R.layout.tictactoe_game)
 
-        _gridRow = 3
-
-        //fill diagonal row
-        val tmpDiagonalRows = mutableMapOf<Int, Int>()
-        for ((subDiagonal, i) in (1.._gridRow).withIndex()) {
-            tmpDiagonalRows[i] = _gridRow - subDiagonal
-        }
-        _frontDiagonalRows = tmpDiagonalRows.toMap()
-
         title = resources.getString(R.string.title_game_room)
-        //retrieve the users info from the payload passed to the view
-        val playersInfo = intent.getBundleExtra("payload")
-        val inP1Name = playersInfo.getString("player1")
-        val inP2Name = playersInfo.getString("player2")
-        val isP1AI = playersInfo.getBoolean("player1AI")
-        val isP2AI = playersInfo.getBoolean("player2AI")
 
-        if (isP1AI || isP2AI) _aITaskHandler = Handler()
+        val playersInfo = intent.getBundleExtra(APP_PAYLOAD)
+        loadBindPlayerAndGameInfos(playersInfo)
 
-        //generate player classes and create the game info and controller classes
-        val _player1 = getPlayer(1, inP1Name, isP1AI)
-        val _player2 = getPlayer(2, inP2Name, isP2AI)
-        _fullGameInfo = GameInfo(
-                PlayerGameInfo(_player1),
-                PlayerGameInfo(_player2)
-        )
-        _gameController = TicTacToeGameController(_player1, _player2, _gridRow)
-
-        //Bind the game info with the tictactoe_game view
-        val binding: TictactoeGameBinding = DataBindingUtil.setContentView(this, R.layout.tictactoe_game)
-        binding.gameInfo = _fullGameInfo
         //set label for the indication of current player
         setWinnerCurrentPlayerLabels()
 
@@ -85,8 +58,12 @@ class TicTacToeActivity : AppCompatActivity() {
         buttonList.forEach {
             val btnInfo = it
             it.button.setOnClickListener {
-                val btnAreaInfo = PlayAreaInfo(btnInfo.row, btnInfo.col)
-                selectArea(it, btnAreaInfo)
+                if (_gameController.canHumanPlay) {
+                    val btnAreaInfo = PlayAreaInfo(btnInfo.row, btnInfo.col)
+                    selectArea(it, btnAreaInfo)
+                } else {
+                    failToast(resources.getString(R.string.error_wait_for_turn))
+                }
             }
         }
 
@@ -127,6 +104,32 @@ class TicTacToeActivity : AppCompatActivity() {
         YoYo.with(Techniques.SlideInUp)
                 .duration(1000)
                 .playOn(btnPlayAgain)
+    }
+
+    /**
+     * Load player, full gameinfo and create gamecontroller and bind fullGameInfo to the main content view
+     */
+    private fun loadBindPlayerAndGameInfos(playersInfo: Bundle): Unit {
+        //retrieve the users info from the payload passed to the view
+        val inP1Name = playersInfo.getString(PLAYER1)
+        val inP2Name = playersInfo.getString(PLAYER2)
+        val isP1AI = playersInfo.getBoolean(PLAYER1_AI)
+        val isP2AI = playersInfo.getBoolean(PLAYER2_AI)
+        _gridRow = playersInfo.getInt(GRID_ROW, 3)
+
+        if (isP1AI || isP2AI) _aITaskHandler = Handler()
+
+        //generate player classes and create the game info and controller classes
+        val _player1 = getPlayer(1, inP1Name, isP1AI)
+        val _player2 = getPlayer(2, inP2Name, isP2AI)
+        _fullGameInfo = GameInfo(
+                PlayerGameInfo(_player1),
+                PlayerGameInfo(_player2)
+        )
+        _gameController = TicTacToeGameController(_player1, _player2, _gridRow)
+        //Bind the game info with the tictactoe_game view
+        val binding: TictactoeGameBinding = DataBindingUtil.setContentView(this, R.layout.tictactoe_game)
+        binding.gameInfo = _fullGameInfo
     }
 
     /**
@@ -187,7 +190,7 @@ class TicTacToeActivity : AppCompatActivity() {
                         }
                     }
 
-                    toast(message, Toast.LENGTH_SHORT)
+                    if (DEBUG_MODE) toast(message, Toast.LENGTH_SHORT)
                 },
                 onGameFinished = {
                     btnPlayAgain.visibility = View.VISIBLE
@@ -238,6 +241,7 @@ class TicTacToeActivity : AppCompatActivity() {
             beforePlay: () -> Unit = {},
             afterPlay: () -> Unit = {}
     ) {
+        _gameController.canHumanPlay = false
         beforePlay()
         _aITaskHandler.postDelayed({
             //give control to the ai to play next round here
@@ -249,6 +253,7 @@ class TicTacToeActivity : AppCompatActivity() {
             }
 
             //call the buttons on click
+            _gameController.canHumanPlay = true
             btnToClick?.button?.callOnClick()
             afterPlay()
         }, delayInMs)
@@ -298,12 +303,12 @@ class TicTacToeActivity : AppCompatActivity() {
     /**
      * Handles winning region animation
      */
-    private fun winningRegionAnimations(winningRegionInfo: WinningRegionInfo): Unit {
+    private fun winningRegionAnimations(winningRegionInfo: FullRegionInfo): Unit {
         val waveAnimation = YoYo.with(Techniques.RubberBand).duration(1000).repeat(3)
 
         if (winningRegionInfo.regionType == RegionType.FORWARD_DIAGONAL) {
             buttonList.forEach {
-                if (_frontDiagonalRows[it.row] == it.col) {
+                if (_gameController.frontDiagonalRows.contains(PlayAreaInfo(it.row, it.col))) {
                     waveAnimation.playOn(it.button)
                 }
             }

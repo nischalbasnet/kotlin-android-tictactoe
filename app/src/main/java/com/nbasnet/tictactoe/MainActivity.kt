@@ -2,8 +2,8 @@ package com.nbasnet.tictactoe
 
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -27,8 +27,10 @@ class MainActivity : AppCompatActivity() {
     var _year: Int = 0
     var _month: Int = 0
     var _day: Int = 0
+    var _storedAge: Int = 0
+    val _minAge: Int = 5
     val DATE_PICKER_DIALOG_ID = 0
-    val formatter: DateTimeFormatter = DateTimeFormat.forPattern("MM/dd/yyyy")
+    val formatter: DateTimeFormatter = DateTimeFormat.forPattern(APP_DATE_FORMAT)
 
     lateinit var _sharePreference: AppPreferences
 
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         _sharePreference = AppPreferences(this)
         //set the language and local resource
         val selectedLanguagePos = _sharePreference.preference.getInt(APP_LANGUAGE_POS, 0)
-        val savedAge = _sharePreference.preference.getInt("age", 0)
+//        val savedAge = _sharePreference.preference.getInt("age", 0)
         changeResourceLocal(selectedLanguagePos)
         setContentView(R.layout.activity_main)
 
@@ -56,7 +58,9 @@ class MainActivity : AppCompatActivity() {
         )
         selectLanguage.prompt = resources.getString(R.string.label_languages)
         selectLanguage.adapter = languageList
-        selectLanguage.setSelection(selectedLanguagePos)
+
+        loadFromPreviousState(_sharePreference.preference)
+//        selectLanguage.setSelection(selectedLanguagePos)
         //change the language
         changeLanguage.setOnClickListener {
             changeResourceLocal(selectLanguage.selectedItemPosition)
@@ -70,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         _day = currentDate.dayOfMonth
 
         //set up date of birth field
-        if (savedAge < 5) {
+        if (_storedAge < _minAge) {
             inputDOB.isFocusable = false
             inputDOB.isCursorVisible = false
 
@@ -86,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             // hide virtual keyboard
             hideKeyboard(getInputMethodManager())
 
-            if (savedAge < 5 && inputDOB.text.isEmpty()) {
+            if (_storedAge < _minAge && inputDOB.text.isEmpty()) {
                 YoYo.with(Techniques.Shake)
                         .duration(700)
                         .playOn(inputDOB)
@@ -105,22 +109,26 @@ class MainActivity : AppCompatActivity() {
                 failToast(resources.getString(R.string.error_name))
             } else {
                 //calculate the age
-                val age: Int = if (savedAge > 4) {
-                    savedAge
+                val age: Int = if (_storedAge >= _minAge) {
+                    _storedAge
                 } else {
                     val userEnteredDOB = DateTime.parse(inputDOB.text.toString(), formatter)
                     Years.yearsBetween(userEnteredDOB, currentDate).years
                 }
 
-                if (age > 4) {
+                if (age >= _minAge) {
                     //save the users age
-                    _sharePreference.put("age", age)
+                    _sharePreference.put(PREF_AGE, age)
+                    _sharePreference.put(PREF_CURRENT_PLAYER1_NAME, inputPlayer1Name.text.toString())
+                    _sharePreference.put(PREF_CURRENT_PLAYER2_NAME, inputPlayer2Name.text.toString())
+                    _sharePreference.put(PREF_CURRENT_PLAYER1_AI, ckboxPlayer1AI.isChecked)
+                    _sharePreference.put(PREF_CURRENT_PLAYER2_AI, ckboxPlayer2AI.isChecked)
 
                     val gameUsers = Bundle()
-                    gameUsers.putString("player1", inputPlayer1Name.text.toString())
-                    gameUsers.putString("player2", inputPlayer2Name.text.toString())
-                    gameUsers.putBoolean("player1AI", ckboxPlayer1AI.isChecked)
-                    gameUsers.putBoolean("player2AI", ckboxPlayer2AI.isChecked)
+                    gameUsers.putString(PLAYER1, inputPlayer1Name.text.toString())
+                    gameUsers.putString(PLAYER2, inputPlayer2Name.text.toString())
+                    gameUsers.putBoolean(PLAYER1_AI, ckboxPlayer1AI.isChecked)
+                    gameUsers.putBoolean(PLAYER2_AI, ckboxPlayer2AI.isChecked)
 
                     YoYo.with(Techniques.Hinge)
                             .duration(1000)
@@ -133,6 +141,20 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    /**
+     * Load from the earlier state store in shared preference
+     */
+    private fun loadFromPreviousState(sharePreference: SharedPreferences) {
+        //fill the input fields from previous state
+        inputPlayer1Name.setText(sharePreference.getString(PREF_CURRENT_PLAYER1_NAME, ""))
+        inputPlayer2Name.setText(sharePreference.getString(PREF_CURRENT_PLAYER2_NAME, ""))
+        ckboxPlayer1AI.isChecked = sharePreference.getBoolean(PREF_CURRENT_PLAYER1_AI, false)
+        ckboxPlayer2AI.isChecked = sharePreference.getBoolean(PREF_CURRENT_PLAYER2_AI, false)
+
+        selectLanguage.setSelection(sharePreference.getInt(APP_LANGUAGE_POS, 0))
+        _storedAge = sharePreference.getInt("age", 0)
     }
 
     /**
