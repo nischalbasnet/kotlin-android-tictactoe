@@ -87,6 +87,7 @@ class TicTacToeActivity : AppCompatActivity() {
                     .playOn(gameArea)
         }
 
+        startGame()
     }
 
     override fun onStart() {
@@ -173,6 +174,13 @@ class TicTacToeActivity : AppCompatActivity() {
     }
 
     /**
+     * Start game and let ai start playing if first player is ai
+     */
+    private fun startGame(): Unit {
+        checkForAIAndLetAIPlay(_gameController.currentPlayer)
+    }
+
+    /**
      * Perform the task for region selected with given areaInfo
      */
     private fun selectArea(area: View, areaInfo: PlayAreaInfo) {
@@ -192,6 +200,14 @@ class TicTacToeActivity : AppCompatActivity() {
 
                     if (DEBUG_MODE) toast(message, Toast.LENGTH_SHORT)
                 },
+                onFail = { (_, message) ->
+                    failToast(message, Toast.LENGTH_SHORT)
+                },
+                onPlayerChange = { nextPlayer: Player ->
+                    setWinnerCurrentPlayerLabels()
+
+                    checkForAIAndLetAIPlay(nextPlayer)
+                },
                 onGameFinished = {
                     btnPlayAgain.visibility = View.VISIBLE
                     YoYo.with(Techniques.SlideInUp)
@@ -202,34 +218,33 @@ class TicTacToeActivity : AppCompatActivity() {
                         successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
                     else
                         successToast("Game Drawn!!")
-                },
-                onFail = { (_, message) ->
-                    failToast(message, Toast.LENGTH_SHORT)
-                },
-                onPlayerChange = { nextPlayer: Player ->
-                    setWinnerCurrentPlayerLabels()
-
-                    if (nextPlayer.isAI && nextPlayer.aIController != null) {
-                        letAIPlayNextRound(
-                                nextPlayer.aIController,
-                                2000,
-                                beforePlay = {
-                                    thinkingContents.visibility = View.VISIBLE
-                                    val thinkAnim = imageThinking.drawable
-                                    when (thinkAnim) {
-                                        is Animatable -> thinkAnim.start()
-                                    }
-                                    YoYo.with(Techniques.BounceInDown)
-                                            .duration(700)
-                                            .playOn(imageThinking)
-                                },
-                                afterPlay = {
-                                    thinkingContents.visibility = View.INVISIBLE
-                                }
-                        )
-                    }
                 }
         )
+    }
+
+    /**
+     * Check if the current player is ai and let if play
+     */
+    private fun checkForAIAndLetAIPlay(currentPlayer: Player): Unit {
+        if (currentPlayer.isAI && currentPlayer.aIController != null && !_gameController.isGameFinished) {
+            letAIPlayNextRound(
+                    currentPlayer.aIController,
+                    2000,
+                    beforePlay = {
+                        thinkingContents.visibility = View.VISIBLE
+                        val thinkAnim = imageThinking.drawable
+                        when (thinkAnim) {
+                            is Animatable -> thinkAnim.start()
+                        }
+                        YoYo.with(Techniques.BounceInDown)
+                                .duration(700)
+                                .playOn(imageThinking)
+                    },
+                    afterPlay = {
+                        thinkingContents.visibility = View.INVISIBLE
+                    }
+            )
+        }
     }
 
     /**

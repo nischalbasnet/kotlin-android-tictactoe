@@ -79,7 +79,7 @@ class EasyAI : IPlayGameAI {
         if (currentSelectionIndex >= gameController.totalRounds || gameController.isAreaPlayable(selection)) {
             return selection
         } else {
-            currentSelectionIndex++
+            if (currentSelectionIndex <= gameController.totalRounds) currentSelectionIndex++
             return getPlayAreaFromSelection(gameController)
         }
     }
