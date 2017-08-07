@@ -20,4 +20,10 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <style name="GameTheme" parent="AppTheme" >
+        <item name="colorPrimary">@color/blue_600</item>
+        <item name="colorPrimaryDark">@color/blue_800</item>
+        <item name="colorAccent">@color/green_600</item>
+    </style>
+
 </resources>

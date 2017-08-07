@@ -1,6 +1,7 @@
 package com.nbasnet.tictactoe
 
 import android.databinding.DataBindingUtil
+import android.graphics.Typeface
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.os.Handler
@@ -31,6 +32,7 @@ class TicTacToeActivity : AppCompatActivity() {
     private lateinit var buttonList: List<BtnAreaInfo>
     private var _gridRow: Int = 3
     private lateinit var _aITaskHandler: Handler
+    lateinit var samuraiFont: Typeface
 
     private val DEBUG_MODE = false
     /**
@@ -42,6 +44,7 @@ class TicTacToeActivity : AppCompatActivity() {
         fullScreenMode()
         setContentView(R.layout.tictactoe_game)
 
+        samuraiFont = Typeface.createFromAsset(assets, "fonts/samurai.ttf")
         title = resources.getString(R.string.title_game_room)
 
         val playersInfo = intent.getBundleExtra(APP_PAYLOAD)
@@ -87,6 +90,7 @@ class TicTacToeActivity : AppCompatActivity() {
                     .playOn(gameArea)
         }
 
+        setCustomFont()
         startGame()
     }
 
@@ -168,9 +172,15 @@ class TicTacToeActivity : AppCompatActivity() {
         val aiController: IPlayGameAI? = if (isAI) AIFactory.getAIPlayer(AIPlayerTypes.EASY) else null
 
         return if (playerNo == 1)
-            Player(name ?: "Player1", R.drawable.tictactoe_cross_anim, R.color.green_400, aiController)
+            Player(name ?: "Player1", R.drawable.tictactoe_cross_anim, R.color.green_500, aiController)
         else
-            Player(name ?: "Player2", R.drawable.tictactoe_circle_anim, R.color.blue_400, aiController)
+            Player(name ?: "Player2", R.drawable.tictactoe_circle_anim, R.color.blue_500, aiController)
+    }
+
+    private fun setCustomFont(): Unit {
+        btnPlayAgain.typeface = samuraiFont
+        labelWinner.typeface = samuraiFont
+        labelWinnerBanner.typeface = samuraiFont
     }
 
     /**
@@ -181,16 +191,16 @@ class TicTacToeActivity : AppCompatActivity() {
     }
 
     /**
-     * Perform the task for region selected with given areaInfo
+     * Perform the task for region selected with given area
      */
     private fun selectArea(area: View, areaInfo: PlayAreaInfo) {
         //play the next round and update the view with the proper values
         _gameController.playNextRound(
                 selectedAreaInfo = areaInfo,
-                onSuccess = { (_, message) ->
-                    val customUserSource = _gameController.currentPlayer.getDrawableSymbol(resources, theme)
+                onSuccess = { it, (_, message) ->
+                    val customUserSource = it.currentPlayer.getDrawableSymbol(resources, theme)
                     if (customUserSource == null) {
-                        area.setBackgroundResource(_gameController.currentPlayer.symbolResource)
+                        area.setBackgroundResource(it.currentPlayer.symbolResource)
                     } else {
                         area.background = customUserSource
                         when (customUserSource) {
@@ -200,10 +210,10 @@ class TicTacToeActivity : AppCompatActivity() {
 
                     if (DEBUG_MODE) toast(message, Toast.LENGTH_SHORT)
                 },
-                onFail = { (_, message) ->
+                onFail = { _, (_, message) ->
                     failToast(message, Toast.LENGTH_SHORT)
                 },
-                onPlayerChange = { nextPlayer: Player ->
+                onPlayerChange = { _, nextPlayer: Player ->
                     setWinnerCurrentPlayerLabels()
 
                     checkForAIAndLetAIPlay(nextPlayer)
@@ -214,8 +224,8 @@ class TicTacToeActivity : AppCompatActivity() {
                             .duration(1000)
                             .playOn(btnPlayAgain)
 
-                    if (_gameController.currentPlayer.isWinner)
-                        successToast("Game over winner: ${_gameController.currentPlayer.name}", Toast.LENGTH_SHORT)
+                    if (it.currentPlayer.isWinner)
+                        successToast("Game over winner: ${it.currentPlayer.name}", Toast.LENGTH_SHORT)
                     else
                         successToast("Game Drawn!!")
                 }

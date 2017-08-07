@@ -21,26 +21,20 @@ data class Player(
         private set
 
     private val _scoreMap = hashMapOf<String, Int>()
-    private var _drawableSymbol: Drawable? = null
-    private var _attemptedForDrawableSymbol = false
 
     private val LOG_TAG = "Player"
 
     /**
      * Get the draw symbol for the player
+     * Always returns a new drawable
      */
     fun getDrawableSymbol(resources: Resources, theme: Resources.Theme): Drawable? {
-        if (!_attemptedForDrawableSymbol) {
-            val drawable: Drawable? = ResourcesCompat.getDrawable(resources, symbolResource, theme)
-            drawable?.setColorFilter(
-                    resources.getColor(color),
-                    PorterDuff.Mode.SRC_IN
-            )
-            _drawableSymbol = drawable
-            _attemptedForDrawableSymbol = true
-        }
-
-        return _drawableSymbol
+        val drawable: Drawable? = ResourcesCompat.getDrawable(resources, symbolResource, theme)
+        drawable?.setColorFilter(
+                resources.getColor(color),
+                PorterDuff.Mode.SRC_IN
+        )
+        return drawable
     }
 
     /**
@@ -100,6 +94,9 @@ data class Player(
         return if (isWinner) isWinner else value > maxRow - 1
     }
 
+    /**
+     * Get the winning areas for player
+     */
     fun getWinningAreas(gameController: TicTacToeGameController): List<PlayAreaInfo> {
         val winningRegion = mutableListOf<PlayAreaInfo>()
         val rowColSeq = 1..maxRow

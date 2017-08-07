@@ -1,9 +1,10 @@
 package com.nbasnet.tictactoe.controllers
 
+import com.nbasnet.tictactoe.models.GameBoard
 import com.nbasnet.tictactoe.models.PlayAreaInfo
 import com.nbasnet.tictactoe.models.Player
 
-class TicTacToeGameController(val player1: Player, val player2: Player, val gridRow: Int) {
+data class TicTacToeGameController(val player1: Player, val player2: Player, val gridRow: Int) {
     var currentPlayer: Player = player1
         private set
 
@@ -15,6 +16,8 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
 
     val totalRounds = gridRow * gridRow
 
+    val gameBoard: GameBoard = GameBoard(gridRow)
+
     lateinit var frontDiagonalRows: List<PlayAreaInfo>
         private set
 
@@ -23,22 +26,21 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
     }
 
     private fun loadInitialValues(): Unit {
-        val tmpDiagonalRows = mutableListOf<PlayAreaInfo>()
-        for ((subDiagonal, i) in (1..gridRow).withIndex()) {
-            tmpDiagonalRows.add(PlayAreaInfo(i, gridRow - subDiagonal))
-        }
-
-        frontDiagonalRows = tmpDiagonalRows.toList()
+        frontDiagonalRows = gameBoard.fullPlayRegion
+                .filter { it.frontDiagonal }
+                .map { it.area }
     }
 
     private fun selectArea(areaInfo: PlayAreaInfo): GamePlayResponse {
         //check if the area is already selected
-        if (player1.isSelected(areaInfo) || player2.isSelected(areaInfo) || isGameFinished) {
+//        if (player1.isSelected(areaInfo) || player2.isSelected(areaInfo) || isGameFinished) {
+        if (gameBoard.isRegionSelected(areaInfo) || isGameFinished) {
             val error = if (isGameFinished) "Game over winner is: ${currentPlayer.name}"
             else "Area already selected"
             //return error
             return GamePlayResponse(false, error)
         } else {
+            gameBoard.selectRegion(areaInfo, currentPlayer)
             currentPlayer.setSelectedArea(areaInfo, this)
             currentRound++
             isGameFinished = currentPlayer.isWinner || currentRound >= totalRounds
@@ -55,22 +57,22 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
      */
     fun playNextRound(
             selectedAreaInfo: PlayAreaInfo,
-            onSuccess: (response: GamePlayResponse) -> Unit = {},
-            onFail: (response: GamePlayResponse) -> Unit = {},
-            onPlayerChange: (nextPlayer: Player) -> Unit = {},
-            onGameFinished: () -> Unit = {}
+            onSuccess: (it: TicTacToeGameController, response: GamePlayResponse) -> Unit = { _, _ -> },
+            onFail: (it: TicTacToeGameController, response: GamePlayResponse) -> Unit = { _, _ -> },
+            onPlayerChange: (it: TicTacToeGameController, nextPlayer: Player) -> Unit = { _, _ -> },
+            onGameFinished: (it: TicTacToeGameController) -> Unit = {}
     ): Unit {
         val selectResponse = selectArea(selectedAreaInfo)
 
         if (selectResponse.success) {
-            onSuccess(selectResponse)
+            onSuccess(this, selectResponse)
             goToNextPlayer()
-            onPlayerChange(currentPlayer)
+            onPlayerChange(this, currentPlayer)
             if (isGameFinished) {
-                onGameFinished()
+                onGameFinished(this)
             }
         } else {
-            onFail(selectResponse)
+            onFail(this, selectResponse)
         }
     }
 
@@ -85,17 +87,15 @@ class TicTacToeGameController(val player1: Player, val player2: Player, val grid
     /**
      * Get the next player
      */
-    fun getNextPlayer(): Player {
-        return if (currentPlayer == player1) player2
-        else player1
-    }
+    fun getNextPlayer(): Player = if (currentPlayer == player1) player2 else player1
 
     /**
      * check and return if current player playing is player1
      */
-    fun isCurrentPlayer1(): Boolean {
-        return currentPlayer == player1
-    }
+    fun isCurrentPlayer1(): Boolean = currentPlayer == player1
+
+
+    fun isCurrentPlayer(player: Player): Boolean = player == currentPlayer
 
     /**
      * Check and return if a game is draw

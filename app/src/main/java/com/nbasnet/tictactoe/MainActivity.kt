@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     val formatter: DateTimeFormatter = DateTimeFormat.forPattern(APP_DATE_FORMAT)
 
     lateinit var _sharePreference: AppPreferences
+    lateinit var samuraiFont: Typeface
 
     /**
      * App strings constants
@@ -42,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _sharePreference = AppPreferences(this)
+
         //set the language and local resource
         val selectedLanguagePos = _sharePreference.preference.getInt(APP_LANGUAGE_POS, 0)
 //        val savedAge = _sharePreference.preference.getInt("age", 0)
@@ -49,6 +52,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         title = resources.getString(R.string.app_name)
+        //set the custom fonts
+        samuraiFont = Typeface.createFromAsset(assets, "fonts/samurai.ttf")
+        setCustomFont()
 
         //fill select language list
         val languageList = ArrayAdapter.createFromResource(
@@ -155,6 +161,13 @@ class MainActivity : AppCompatActivity() {
 
         selectLanguage.setSelection(sharePreference.getInt(APP_LANGUAGE_POS, 0))
         _storedAge = sharePreference.getInt("age", 0)
+    }
+
+    /**
+     * Set custom font
+     */
+    private fun setCustomFont(): Unit {
+        buttonPlayGame.typeface = samuraiFont
     }
 
     /**
