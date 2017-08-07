@@ -44,7 +44,7 @@ class TicTacToeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _sharePreference = AppPreferences(this)
-        _startPlayer = _sharePreference.preference.getInt("start_player", 1)
+        _startPlayer = _sharePreference.preference.getInt(PREF_START_PLAYER, 1)
         //set up the window mode
         fullScreenMode()
         setContentView(R.layout.tictactoe_game)
@@ -88,7 +88,7 @@ class TicTacToeActivity : AppCompatActivity() {
                     .duration(1000)
                     .onEnd {
                         //toggle next player
-                        _sharePreference.put("start_player", if (_startPlayer == 1) 2 else 1)
+                        _sharePreference.put(PREF_START_PLAYER, if (_startPlayer == 1) 2 else 1)
 
                         finish()
                         overridePendingTransition(0, 0)

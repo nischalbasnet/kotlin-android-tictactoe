@@ -9,6 +9,7 @@ val PREF_CURRENT_PLAYER1_NAME = "currentPlayer1Name"
 val PREF_CURRENT_PLAYER2_NAME = "currentPlayer2Name"
 val PREF_CURRENT_PLAYER1_AI = "currentPlayer1AI"
 val PREF_CURRENT_PLAYER2_AI = "currentPlayer2AI"
+val PREF_START_PLAYER = "start_player"
 /**
  * Activity payload constants
  */

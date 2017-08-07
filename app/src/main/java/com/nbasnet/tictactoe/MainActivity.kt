@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                     _sharePreference.put(PREF_CURRENT_PLAYER2_NAME, inputPlayer2Name.text.toString())
                     _sharePreference.put(PREF_CURRENT_PLAYER1_AI, ckboxPlayer1AI.isChecked)
                     _sharePreference.put(PREF_CURRENT_PLAYER2_AI, ckboxPlayer2AI.isChecked)
+                    _sharePreference.put(PREF_START_PLAYER, 1)
 
                     val gamePayload = Bundle()
                     gamePayload.putString(PLAYER1, inputPlayer1Name.text.toString())
