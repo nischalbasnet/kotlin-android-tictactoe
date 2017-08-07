@@ -16,6 +16,7 @@ import com.nbasnet.extensions.activity.failToast
 import com.nbasnet.extensions.activity.fullScreenMode
 import com.nbasnet.extensions.activity.successToast
 import com.nbasnet.extensions.activity.toast
+import com.nbasnet.helpers.AppPreferences
 import com.nbasnet.tictactoe.ai.AIFactory
 import com.nbasnet.tictactoe.ai.AIPlayerTypes
 import com.nbasnet.tictactoe.ai.IPlayGameAI
@@ -29,9 +30,11 @@ class TicTacToeActivity : AppCompatActivity() {
     private lateinit var _fullGameInfo: GameInfo
     private lateinit var _gameController: TicTacToeGameController
 
-    private lateinit var buttonList: List<BtnAreaInfo>
     private var _gridRow: Int = 3
+    private var _startPlayer: Int = 1
+    private lateinit var buttonList: List<BtnAreaInfo>
     private lateinit var _aITaskHandler: Handler
+    private lateinit var _sharePreference: AppPreferences
     lateinit var samuraiFont: Typeface
 
     private val DEBUG_MODE = false
@@ -40,6 +43,8 @@ class TicTacToeActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _sharePreference = AppPreferences(this)
+        _startPlayer = _sharePreference.preference.getInt("start_player", 1)
         //set up the window mode
         fullScreenMode()
         setContentView(R.layout.tictactoe_game)
@@ -82,6 +87,9 @@ class TicTacToeActivity : AppCompatActivity() {
             YoYo.with(Techniques.ZoomOut)
                     .duration(1000)
                     .onEnd {
+                        //toggle next player
+                        _sharePreference.put("start_player", if (_startPlayer == 1) 2 else 1)
+
                         finish()
                         overridePendingTransition(0, 0)
                         startActivity(intent)
@@ -131,7 +139,7 @@ class TicTacToeActivity : AppCompatActivity() {
                 PlayerGameInfo(_player1),
                 PlayerGameInfo(_player2)
         )
-        _gameController = TicTacToeGameController(_player1, _player2, _gridRow)
+        _gameController = TicTacToeGameController(_player1, _player2, _gridRow, _startPlayer)
         //Bind the game info with the tictactoe_game view
         val binding: TictactoeGameBinding = DataBindingUtil.setContentView(this, R.layout.tictactoe_game)
         binding.gameInfo = _fullGameInfo

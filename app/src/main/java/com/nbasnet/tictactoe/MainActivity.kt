@@ -130,16 +130,17 @@ class MainActivity : AppCompatActivity() {
                     _sharePreference.put(PREF_CURRENT_PLAYER1_AI, ckboxPlayer1AI.isChecked)
                     _sharePreference.put(PREF_CURRENT_PLAYER2_AI, ckboxPlayer2AI.isChecked)
 
-                    val gameUsers = Bundle()
-                    gameUsers.putString(PLAYER1, inputPlayer1Name.text.toString())
-                    gameUsers.putString(PLAYER2, inputPlayer2Name.text.toString())
-                    gameUsers.putBoolean(PLAYER1_AI, ckboxPlayer1AI.isChecked)
-                    gameUsers.putBoolean(PLAYER2_AI, ckboxPlayer2AI.isChecked)
+                    val gamePayload = Bundle()
+                    gamePayload.putString(PLAYER1, inputPlayer1Name.text.toString())
+                    gamePayload.putString(PLAYER2, inputPlayer2Name.text.toString())
+                    gamePayload.putBoolean(PLAYER1_AI, ckboxPlayer1AI.isChecked)
+                    gamePayload.putBoolean(PLAYER2_AI, ckboxPlayer2AI.isChecked)
+                    gamePayload.putInt(GRID_ROW, 3)
 
                     YoYo.with(Techniques.Hinge)
                             .duration(1000)
                             .onEnd {
-                                startActivity(TicTacToeActivity::class.java, gameUsers)
+                                startActivity(TicTacToeActivity::class.java, gamePayload)
                             }
                             .playOn(buttonPlayGame)
                 } else {

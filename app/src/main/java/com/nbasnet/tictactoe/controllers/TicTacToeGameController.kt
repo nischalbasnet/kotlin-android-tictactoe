@@ -4,8 +4,8 @@ import com.nbasnet.tictactoe.models.GameBoard
 import com.nbasnet.tictactoe.models.PlayAreaInfo
 import com.nbasnet.tictactoe.models.Player
 
-data class TicTacToeGameController(val player1: Player, val player2: Player, val gridRow: Int) {
-    var currentPlayer: Player = player1
+data class TicTacToeGameController(val player1: Player, val player2: Player, val gridRow: Int, val startPlayer: Int) {
+    var currentPlayer: Player = if (startPlayer == 2) player2 else player1
         private set
 
     var isGameFinished: Boolean = false
