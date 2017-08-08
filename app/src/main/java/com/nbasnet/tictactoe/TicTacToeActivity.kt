@@ -13,10 +13,7 @@ import android.widget.Button
 import android.widget.Toast
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
-import com.nbasnet.extensions.activity.failToast
-import com.nbasnet.extensions.activity.fullScreenMode
-import com.nbasnet.extensions.activity.successToast
-import com.nbasnet.extensions.activity.toast
+import com.nbasnet.extensions.activity.*
 import com.nbasnet.helpers.AppPreferences
 import com.nbasnet.tictactoe.ai.AIFactory
 import com.nbasnet.tictactoe.ai.AIPlayerTypes
@@ -45,7 +42,7 @@ class TicTacToeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _sharePreference = AppPreferences(this)
-        _startPlayer = _sharePreference.preference.getInt(PREF_START_PLAYER, 1)
+        _startPlayer = _sharePreference.get(PREF_START_PLAYER, 1)
         //set up the window mode
         fullScreenMode()
         setContentView(R.layout.tictactoe_game)
@@ -91,10 +88,7 @@ class TicTacToeActivity : AppCompatActivity() {
                         //toggle next player
                         _sharePreference.put(PREF_START_PLAYER, if (_startPlayer == 1) 2 else 1)
 
-                        finish()
-                        overridePendingTransition(0, 0)
-                        startActivity(intent)
-                        overridePendingTransition(0, 0)
+                        refreshActivity(true)
                     }
                     .playOn(gameArea)
         }
@@ -139,11 +133,11 @@ class TicTacToeActivity : AppCompatActivity() {
         _fullGameInfo = GameInfo(
                 PlayerGameInfo(
                         _player1,
-                        ObservableInt(_sharePreference.preference.getInt(PREF_PLAYER1_WINS, 0))
+                        ObservableInt(_sharePreference.get(PREF_PLAYER1_WINS, 0))
                 ),
                 PlayerGameInfo(
                         _player2,
-                        ObservableInt(_sharePreference.preference.getInt(PREF_PLAYER2_WINS, 0))
+                        ObservableInt(_sharePreference.get(PREF_PLAYER2_WINS, 0))
                 )
         )
         _gameController = TicTacToeGameController(_player1, _player2, _gridRow, _startPlayer)

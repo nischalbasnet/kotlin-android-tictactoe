@@ -53,3 +53,10 @@ fun FragmentActivity.fullScreenMode(): Unit {
             WindowManager.LayoutParams.FLAG_FULLSCREEN
     )
 }
+
+fun FragmentActivity.refreshActivity(withoutBlink: Boolean = false): Unit {
+    finish()
+    overridePendingTransition(0, 0)
+    startActivity(intent)
+    overridePendingTransition(0, 0)
+}

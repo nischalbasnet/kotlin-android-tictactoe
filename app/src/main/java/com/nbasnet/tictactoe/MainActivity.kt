@@ -2,7 +2,6 @@ package com.nbasnet.tictactoe
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Bundle
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         _sharePreference = AppPreferences(this)
 
         //set the language and local resource
-        val selectedLanguagePos = _sharePreference.preference.getInt(APP_LANGUAGE_POS, 0)
+        val selectedLanguagePos = _sharePreference.get(APP_LANGUAGE_POS, 0)
 //        val savedAge = _sharePreference.preference.getInt("age", 0)
         changeResourceLocal(selectedLanguagePos)
         setContentView(R.layout.activity_main)
@@ -65,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         selectLanguage.prompt = resources.getString(R.string.label_languages)
         selectLanguage.adapter = languageList
 
-        loadFromPreviousState(_sharePreference.preference)
+        loadFromPreviousState(_sharePreference)
 //        selectLanguage.setSelection(selectedLanguagePos)
         //change the language
         changeLanguage.setOnClickListener {
@@ -156,15 +155,15 @@ class MainActivity : AppCompatActivity() {
     /**
      * Load from the earlier state store in shared preference
      */
-    private fun loadFromPreviousState(sharePreference: SharedPreferences) {
+    private fun loadFromPreviousState(appPreference: AppPreferences) {
         //fill the input fields from previous state
-        inputPlayer1Name.setText(sharePreference.getString(PREF_PLAYER1_NAME, ""))
-        inputPlayer2Name.setText(sharePreference.getString(PREF_PLAYER2_NAME, ""))
-        ckboxPlayer1AI.isChecked = sharePreference.getBoolean(PREF_PLAYER1_AI, false)
-        ckboxPlayer2AI.isChecked = sharePreference.getBoolean(PREF_PLAYER2_AI, false)
+        inputPlayer1Name.setText(appPreference.get(PREF_PLAYER1_NAME, ""))
+        inputPlayer2Name.setText(appPreference.get(PREF_PLAYER2_NAME, ""))
+        ckboxPlayer1AI.isChecked = appPreference.get(PREF_PLAYER1_AI, false)
+        ckboxPlayer2AI.isChecked = appPreference.get(PREF_PLAYER2_AI, false)
 
-        selectLanguage.setSelection(sharePreference.getInt(APP_LANGUAGE_POS, 0))
-        _storedAge = sharePreference.getInt("age", 0)
+        selectLanguage.setSelection(appPreference.get(APP_LANGUAGE_POS, 0))
+        _storedAge = appPreference.get("age", 0)
     }
 
     /**
