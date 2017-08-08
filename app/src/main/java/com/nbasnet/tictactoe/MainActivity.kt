@@ -125,11 +125,13 @@ class MainActivity : AppCompatActivity() {
                 if (age >= _minAge) {
                     //save the users age
                     _sharePreference.put(PREF_AGE, age)
-                    _sharePreference.put(PREF_CURRENT_PLAYER1_NAME, inputPlayer1Name.text.toString())
-                    _sharePreference.put(PREF_CURRENT_PLAYER2_NAME, inputPlayer2Name.text.toString())
-                    _sharePreference.put(PREF_CURRENT_PLAYER1_AI, ckboxPlayer1AI.isChecked)
-                    _sharePreference.put(PREF_CURRENT_PLAYER2_AI, ckboxPlayer2AI.isChecked)
+                    _sharePreference.put(PREF_PLAYER1_NAME, inputPlayer1Name.text.toString())
+                    _sharePreference.put(PREF_PLAYER2_NAME, inputPlayer2Name.text.toString())
+                    _sharePreference.put(PREF_PLAYER1_AI, ckboxPlayer1AI.isChecked)
+                    _sharePreference.put(PREF_PLAYER2_AI, ckboxPlayer2AI.isChecked)
                     _sharePreference.put(PREF_START_PLAYER, 1)
+                    _sharePreference.put(PREF_PLAYER1_WINS, 0)
+                    _sharePreference.put(PREF_PLAYER2_WINS, 0)
 
                     val gamePayload = Bundle()
                     gamePayload.putString(PLAYER1, inputPlayer1Name.text.toString())
@@ -156,10 +158,10 @@ class MainActivity : AppCompatActivity() {
      */
     private fun loadFromPreviousState(sharePreference: SharedPreferences) {
         //fill the input fields from previous state
-        inputPlayer1Name.setText(sharePreference.getString(PREF_CURRENT_PLAYER1_NAME, ""))
-        inputPlayer2Name.setText(sharePreference.getString(PREF_CURRENT_PLAYER2_NAME, ""))
-        ckboxPlayer1AI.isChecked = sharePreference.getBoolean(PREF_CURRENT_PLAYER1_AI, false)
-        ckboxPlayer2AI.isChecked = sharePreference.getBoolean(PREF_CURRENT_PLAYER2_AI, false)
+        inputPlayer1Name.setText(sharePreference.getString(PREF_PLAYER1_NAME, ""))
+        inputPlayer2Name.setText(sharePreference.getString(PREF_PLAYER2_NAME, ""))
+        ckboxPlayer1AI.isChecked = sharePreference.getBoolean(PREF_PLAYER1_AI, false)
+        ckboxPlayer2AI.isChecked = sharePreference.getBoolean(PREF_PLAYER2_AI, false)
 
         selectLanguage.setSelection(sharePreference.getInt(APP_LANGUAGE_POS, 0))
         _storedAge = sharePreference.getInt("age", 0)

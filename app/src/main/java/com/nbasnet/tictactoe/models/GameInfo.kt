@@ -1,5 +1,7 @@
 package com.nbasnet.tictactoe.models
 
+import android.databinding.ObservableInt
+
 /**
  * Game info holder class
  */
@@ -13,9 +15,16 @@ data class GameInfo(
  */
 data class PlayerGameInfo(
         val player: Player,
-        var win: Int = 0,
+        var win: ObservableInt = ObservableInt(0),
         var loss: Int = 0
-)
+) {
+    /**
+     * Functions required for properly binding with the view
+     */
+    fun winToString(): String = win.toString()
+
+    fun lossToString(): String = loss.toString()
+}
 
 /**
  * Info about the single play area

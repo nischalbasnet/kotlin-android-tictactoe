@@ -1,6 +1,7 @@
 package com.nbasnet.tictactoe
 
 import android.databinding.DataBindingUtil
+import android.databinding.ObservableInt
 import android.graphics.Typeface
 import android.graphics.drawable.Animatable
 import android.os.Bundle
@@ -136,8 +137,14 @@ class TicTacToeActivity : AppCompatActivity() {
         val _player1 = getPlayer(1, inP1Name, isP1AI)
         val _player2 = getPlayer(2, inP2Name, isP2AI)
         _fullGameInfo = GameInfo(
-                PlayerGameInfo(_player1),
-                PlayerGameInfo(_player2)
+                PlayerGameInfo(
+                        _player1,
+                        ObservableInt(_sharePreference.preference.getInt(PREF_PLAYER1_WINS, 0))
+                ),
+                PlayerGameInfo(
+                        _player2,
+                        ObservableInt(_sharePreference.preference.getInt(PREF_PLAYER2_WINS, 0))
+                )
         )
         _gameController = TicTacToeGameController(_player1, _player2, _gridRow, _startPlayer)
         //Bind the game info with the tictactoe_game view
@@ -189,6 +196,8 @@ class TicTacToeActivity : AppCompatActivity() {
         btnPlayAgain.typeface = samuraiFont
         labelWinner.typeface = samuraiFont
         labelWinnerBanner.typeface = samuraiFont
+        labelWinPlayer1.typeface = samuraiFont
+        labelWinPlayer2.typeface = samuraiFont
     }
 
     /**
@@ -232,10 +241,26 @@ class TicTacToeActivity : AppCompatActivity() {
                             .duration(1000)
                             .playOn(btnPlayAgain)
 
-                    if (it.currentPlayer.isWinner)
+                    if (it.currentPlayer.isWinner) {
                         successToast("Game over winner: ${it.currentPlayer.name}", Toast.LENGTH_SHORT)
-                    else
+
+                        //set the winscores
+                        if (_gameController.player1.isWinner) {
+                            YoYo.with(Techniques.Bounce)
+                                    .duration(1000)
+                                    .playOn(labelWinPlayer1)
+                            _fullGameInfo.player1Info.win.set(_fullGameInfo.player1Info.win.get() + 1)
+                            _sharePreference.put(PREF_PLAYER1_WINS, _fullGameInfo.player1Info.win.get())
+                        } else if (_gameController.player2.isWinner) {
+                            YoYo.with(Techniques.Bounce)
+                                    .duration(1000)
+                                    .playOn(labelWinPlayer1)
+                            _fullGameInfo.player2Info.win.set(_fullGameInfo.player2Info.win.get() + 1)
+                            _sharePreference.put(PREF_PLAYER2_WINS, _fullGameInfo.player2Info.win.get())
+                        }
+                    } else {
                         successToast("Game Drawn!!")
+                    }
                 }
         )
     }
@@ -337,7 +362,7 @@ class TicTacToeActivity : AppCompatActivity() {
      * Handles winning region animation
      */
     private fun winningRegionAnimations(winningRegionInfo: FullRegionInfo): Unit {
-        val waveAnimation = YoYo.with(Techniques.RubberBand).duration(1000).repeat(3)
+        val waveAnimation = YoYo.with(Techniques.Wave).duration(4000)
 
         if (winningRegionInfo.regionType == RegionType.FORWARD_DIAGONAL) {
             buttonList.forEach {
