@@ -11,10 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
-import com.nbasnet.extensions.activity.failToast
-import com.nbasnet.extensions.activity.getInputMethodManager
-import com.nbasnet.extensions.activity.hideKeyboard
-import com.nbasnet.extensions.activity.startActivity
+import com.nbasnet.extensions.activity.*
 import com.nbasnet.helpers.AppPreferences
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
@@ -35,18 +32,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var _sharePreference: AppPreferences
     lateinit var samuraiFont: Typeface
 
-    /**
-     * App strings constants
-     */
-    val APP_LANGUAGE_POS = "APP_LANGUAGE_POS"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _sharePreference = AppPreferences(this)
 
-        //set the language and local resource
-        val selectedLanguagePos = _sharePreference.get(APP_LANGUAGE_POS, 0)
-//        val savedAge = _sharePreference.preference.getInt("age", 0)
+        //set the language and local
+        val selectedLanguagePos = _sharePreference.selectedLanguagePosition
         changeResourceLocal(selectedLanguagePos)
         setContentView(R.layout.activity_main)
 
@@ -123,14 +114,14 @@ class MainActivity : AppCompatActivity() {
 
                 if (age >= _minAge) {
                     //save the users age
-                    _sharePreference.put(PREF_AGE, age)
-                    _sharePreference.put(PREF_PLAYER1_NAME, inputPlayer1Name.text.toString())
-                    _sharePreference.put(PREF_PLAYER2_NAME, inputPlayer2Name.text.toString())
-                    _sharePreference.put(PREF_PLAYER1_AI, ckboxPlayer1AI.isChecked)
-                    _sharePreference.put(PREF_PLAYER2_AI, ckboxPlayer2AI.isChecked)
-                    _sharePreference.put(PREF_START_PLAYER, 1)
-                    _sharePreference.put(PREF_PLAYER1_WINS, 0)
-                    _sharePreference.put(PREF_PLAYER2_WINS, 0)
+                    _sharePreference.userAge = age
+                    _sharePreference.player1Name = inputPlayer1Name.text.toString()
+                    _sharePreference.player2Name = inputPlayer2Name.text.toString()
+                    _sharePreference.isPlayer1AI = ckboxPlayer1AI.isChecked
+                    _sharePreference.isPlayer2AI = ckboxPlayer2AI.isChecked
+                    _sharePreference.startPlayer = 1
+                    _sharePreference.player1WinsCount = 0
+                    _sharePreference.player2WinsCount = 0
 
                     val gamePayload = Bundle()
                     gamePayload.putString(PLAYER1, inputPlayer1Name.text.toString())
@@ -157,13 +148,13 @@ class MainActivity : AppCompatActivity() {
      */
     private fun loadFromPreviousState(appPreference: AppPreferences) {
         //fill the input fields from previous state
-        inputPlayer1Name.setText(appPreference.get(PREF_PLAYER1_NAME, ""))
-        inputPlayer2Name.setText(appPreference.get(PREF_PLAYER2_NAME, ""))
-        ckboxPlayer1AI.isChecked = appPreference.get(PREF_PLAYER1_AI, false)
-        ckboxPlayer2AI.isChecked = appPreference.get(PREF_PLAYER2_AI, false)
+        inputPlayer1Name.setText(appPreference.player1Name)
+        inputPlayer2Name.setText(appPreference.player2Name)
+        ckboxPlayer1AI.isChecked = appPreference.isPlayer1AI
+        ckboxPlayer2AI.isChecked = appPreference.isPlayer2AI
 
-        selectLanguage.setSelection(appPreference.get(APP_LANGUAGE_POS, 0))
-        _storedAge = appPreference.get("age", 0)
+        selectLanguage.setSelection(appPreference.selectedLanguagePosition)
+        _storedAge = appPreference.userAge
     }
 
     /**
@@ -185,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 
         resources.updateConfiguration(config, resources.displayMetrics)
         //save the language in shared preference
-        _sharePreference.put(APP_LANGUAGE_POS, position)
+        _sharePreference.selectedLanguagePosition = position
     }
 
     /**

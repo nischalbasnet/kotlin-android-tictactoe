@@ -42,7 +42,7 @@ class TicTacToeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _sharePreference = AppPreferences(this)
-        _startPlayer = _sharePreference.get(PREF_START_PLAYER, 1)
+        _startPlayer = _sharePreference.startPlayer
         //set up the window mode
         fullScreenMode()
         setContentView(R.layout.tictactoe_game)
@@ -86,7 +86,7 @@ class TicTacToeActivity : AppCompatActivity() {
                     .duration(1000)
                     .onEnd {
                         //toggle next player
-                        _sharePreference.put(PREF_START_PLAYER, if (_startPlayer == 1) 2 else 1)
+                        _sharePreference.startPlayer = if (_startPlayer == 1) 2 else 1
 
                         refreshActivity(true)
                     }
@@ -133,11 +133,11 @@ class TicTacToeActivity : AppCompatActivity() {
         _fullGameInfo = GameInfo(
                 PlayerGameInfo(
                         _player1,
-                        ObservableInt(_sharePreference.get(PREF_PLAYER1_WINS, 0))
+                        ObservableInt(_sharePreference.player1WinsCount)
                 ),
                 PlayerGameInfo(
                         _player2,
-                        ObservableInt(_sharePreference.get(PREF_PLAYER2_WINS, 0))
+                        ObservableInt(_sharePreference.player2WinsCount)
                 )
         )
         _gameController = TicTacToeGameController(_player1, _player2, _gridRow, _startPlayer)
@@ -244,13 +244,13 @@ class TicTacToeActivity : AppCompatActivity() {
                                     .duration(1000)
                                     .playOn(labelWinPlayer1)
                             _fullGameInfo.player1Info.win.set(_fullGameInfo.player1Info.win.get() + 1)
-                            _sharePreference.put(PREF_PLAYER1_WINS, _fullGameInfo.player1Info.win.get())
+                            _sharePreference.player1WinsCount = _fullGameInfo.player1Info.win.get()
                         } else if (_gameController.player2.isWinner) {
                             YoYo.with(Techniques.Bounce)
                                     .duration(1000)
                                     .playOn(labelWinPlayer1)
                             _fullGameInfo.player2Info.win.set(_fullGameInfo.player2Info.win.get() + 1)
-                            _sharePreference.put(PREF_PLAYER2_WINS, _fullGameInfo.player2Info.win.get())
+                            _sharePreference.player2WinsCount = _fullGameInfo.player2Info.win.get()
                         }
                     } else {
                         successToast("Game Drawn!!")
