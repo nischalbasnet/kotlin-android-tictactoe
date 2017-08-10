@@ -13,12 +13,14 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.nbasnet.extensions.activity.*
 import com.nbasnet.helpers.AppPreferences
+import com.nbasnet.helpers.FontManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.joda.time.DateTime
 import org.joda.time.Years
 import org.joda.time.format.DateTimeFormat
 import org.joda.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.HashMap
 
 class MainActivity : AppCompatActivity() {
     var _year: Int = 0
@@ -29,8 +31,13 @@ class MainActivity : AppCompatActivity() {
     val DATE_PICKER_DIALOG_ID = 0
     val formatter: DateTimeFormatter = DateTimeFormat.forPattern(APP_DATE_FORMAT)
 
+    private val languageMap: HashMap<Int, String> = hashMapOf(
+            0 to "english",
+            1 to "nepali"
+    )
+
     lateinit var _sharePreference: AppPreferences
-    lateinit var samuraiFont: Typeface
+    lateinit var customFont: Typeface
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +50,11 @@ class MainActivity : AppCompatActivity() {
 
         title = resources.getString(R.string.app_name)
         //set the custom fonts
-        samuraiFont = Typeface.createFromAsset(assets, "fonts/samurai.ttf")
+        customFont = FontManager.getCustomFontForLanguage(
+                assets,
+                _sharePreference.selectedLanguage,
+                forceLoad = true
+        )
         setCustomFont()
 
         //fill select language list
@@ -56,11 +67,15 @@ class MainActivity : AppCompatActivity() {
         selectLanguage.adapter = languageList
 
         loadFromPreviousState(_sharePreference)
-//        selectLanguage.setSelection(selectedLanguagePos)
+//        selectedLanguage.setSelection(selectedLanguagePos)
         //change the language
         changeLanguage.setOnClickListener {
-            changeResourceLocal(selectLanguage.selectedItemPosition)
-            recreate()
+            val newLanguage = languageMap[selectLanguage.selectedItemPosition] ?: "english"
+            if (newLanguage != _sharePreference.selectedLanguage) {
+                changeResourceLocal(selectLanguage.selectedItemPosition)
+                _sharePreference.selectedLanguage = newLanguage
+                recreate()
+            }
         }
 
         //fill current date
@@ -161,7 +176,7 @@ class MainActivity : AppCompatActivity() {
      * Set custom font
      */
     private fun setCustomFont(): Unit {
-        buttonPlayGame.typeface = samuraiFont
+        buttonPlayGame.typeface = customFont
     }
 
     /**

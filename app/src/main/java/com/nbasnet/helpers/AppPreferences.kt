@@ -13,6 +13,7 @@ class AppPreferences(context: Context) : BaseAppPreference() {
     override val appPreferenceHandler = AppPreferencesHandler(context)
 
     var selectedLanguagePosition: Int by delegateProp(0)
+    var selectedLanguage: String by delegateProp("english")
     var userAge: Int by delegateProp(0)
     var player1Name: String by delegateProp("")
     var player2Name: String by delegateProp("")

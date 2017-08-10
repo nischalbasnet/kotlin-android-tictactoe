@@ -15,6 +15,7 @@ import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.nbasnet.extensions.activity.*
 import com.nbasnet.helpers.AppPreferences
+import com.nbasnet.helpers.FontManager
 import com.nbasnet.tictactoe.ai.AIFactory
 import com.nbasnet.tictactoe.ai.AIPlayerTypes
 import com.nbasnet.tictactoe.ai.IPlayGameAI
@@ -33,7 +34,7 @@ class TicTacToeActivity : AppCompatActivity() {
     private lateinit var buttonList: List<BtnAreaInfo>
     private lateinit var _aITaskHandler: Handler
     private lateinit var _sharePreference: AppPreferences
-    lateinit var samuraiFont: Typeface
+    lateinit var customFont: Typeface
 
     private val DEBUG_MODE = false
     /**
@@ -47,7 +48,7 @@ class TicTacToeActivity : AppCompatActivity() {
         fullScreenMode()
         setContentView(R.layout.tictactoe_game)
 
-        samuraiFont = Typeface.createFromAsset(assets, "fonts/samurai.ttf")
+        customFont = FontManager.getCustomFontForLanguage(assets, _sharePreference.selectedLanguage)
         title = resources.getString(R.string.title_game_room)
 
         val playersInfo = intent.getBundleExtra(APP_PAYLOAD)
@@ -187,11 +188,11 @@ class TicTacToeActivity : AppCompatActivity() {
     }
 
     private fun setCustomFont(): Unit {
-        btnPlayAgain.typeface = samuraiFont
-        labelWinner.typeface = samuraiFont
-        labelWinnerBanner.typeface = samuraiFont
-        labelWinPlayer1.typeface = samuraiFont
-        labelWinPlayer2.typeface = samuraiFont
+        btnPlayAgain.typeface = customFont
+        labelWinner.typeface = customFont
+        labelWinnerBanner.typeface = customFont
+        labelWinPlayer1.typeface = customFont
+        labelWinPlayer2.typeface = customFont
     }
 
     /**

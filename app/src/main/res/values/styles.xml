@@ -32,4 +32,8 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="GameTheme.BigButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:textSize">22sp</item>
+    </style>
+
 </resources>

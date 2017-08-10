@@ -22,7 +22,7 @@
 
             <Button
                 android:id="@+id/btnPlayAgain"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/GameTheme.BigButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -34,7 +34,6 @@
                 android:elevation="8dp"
                 android:gravity="center"
                 android:text="@string/btn_play_again"
-                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                 app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -69,7 +68,7 @@
                         android:text="@{String.valueOf(gameInfo.player1Info.win.get())}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/medium_text" />
 
                     <TextView
                         android:id="@+id/labelWinPlayer2"
@@ -81,7 +80,7 @@
                         android:text="@{String.valueOf(gameInfo.player2Info.win.get())}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/medium_text" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -98,7 +97,8 @@
                         android:layout_weight="1"
                         android:gravity="end"
                         android:text="@string/label_thinking"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/small_text" />
 
                     <ImageView
                         android:id="@+id/imageThinking"
@@ -165,7 +165,8 @@
                             android:gravity="start"
                             android:text="@{gameInfo.player1Info.player.name}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/small_text" />
 
                         <TextView
                             android:id="@+id/labelWinner"
@@ -174,6 +175,7 @@
                             android:gravity="center"
                             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                             android:textColor="@android:color/holo_green_dark"
+                            android:textSize="@dimen/medium_text"
                             android:textStyle="bold" />
 
                         <TextView
@@ -183,7 +185,8 @@
                             android:gravity="end"
                             android:text="@{gameInfo.player2Info.player.name}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/small_text" />
 
                     </TableRow>
 
